@@ -1,0 +1,1888 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  width: 45em;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 30px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><title>README</title></head><body><article class="markdown-body"><p>我都不知道为什么要仔细分析这背后的逻辑，可能是因为bisheng.js在ant design中出色的表现吧</p>
+<h3 id="1npm-start"><a name="user-content-1npm-start" href="#1npm-start" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.npm start背后的逻辑</h3>
+<h4 id="11"><a name="user-content-11" href="#11" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.1 源码分析部分</h4>
+<p>执行bisheng start执行的就是下面的代码逻辑<br />
+<pre><code class="js">exports.start = function start(program) {
+  const configFile = path.join(process.cwd(), program.config || 'bisheng.config.js');    
+  const config = getConfig(configFile);
+  mkdirp.sync(config.output);
+
+  const template = fs.readFileSync(config.htmlTemplate).toString();
+  const templatePath = path.join(process.cwd(), config.output, 'index.html');
+  fs.writeFileSync(templatePath, nunjucks.renderString(template, { root: '/' }));
+  generateEntryFile(config.theme, config.entryName, '/');
+  const doraConfig = Object.assign({}, {
+    cwd: path.join(process.cwd(), config.output),
+    port: config.port,
+  }, config.doraConfig);
+  doraConfig.plugins = [
+    [require.resolve('dora-plugin-webpack'), {
+      //获取webpack基础配置并更新;手动调用webpack开始编译文件，把静态资源吐给服务器;监听文件变化
+      disableNpmInstall: true,
+      cwd: process.cwd(),//在'middleware.before'中会默认读取cwd下的配置文件webpack.config.js
+      config: 'bisheng-inexistent.config.js',//但是在这里就是读取我们的'bisheng-inexistent.config.js'
+    }],
+    [path.join(__dirname, 'dora-plugin-bisheng'), {
+      config: configFile,
+    }],
+
+    require.resolve('dora-plugin-browser-history'),
+  ];
+  const usersDoraPlugin = config.doraConfig.plugins || [];
+  doraConfig.plugins = doraConfig.plugins.concat(usersDoraPlugin);
+ //其中涉及webpack生命周期的那些方法值得好好研究
+  if (program.livereload) {
+    doraConfig.plugins.push(require.resolve('dora-plugin-livereload'));
+  }
+  dora(doraConfig);
+};
+</code></pre></p>
+<p>其实里面的代码逻辑都是很简单的，就是加载特定的配置文件bisheng.config.js<br />
+<pre><code class="js"> const configFile = path.join(process.cwd(), program.config || 'bisheng.config.js');
+  const config = getConfig(configFile);
+</code></pre></p>
+<p>然后生成一个临时目录，用于存放我们的routes.js表示项目的路由，其需要theme，因为我们所有的文件都是存放在theme目录下的，这也是为什么ant-design中必须有theme目录;同时也生成一个entry.index.js，其表示的是我们的ReactRouter配置内容，其需要我们传入routes.js，因为要通过它获取到的相应的组件去实例化。</p>
+<p>那么我们为什么可以处理markdown文件呢？其实这要从我们配置的dora插件来分析，首先我们看看最重要的一个插件：<br />
+<pre><code class="js">[path.join(__dirname, 'dora-plugin-bisheng'), {
+      config: configFile,
+    }]
+</code></pre></p>
+<p>我们看看在这个插件里面做了什么<br />
+<pre><code class="js">'use strict';
+const updateWebpackConfig = require('./utils/update-webpack-config');
+module.exports = {
+  'webpack.updateConfig'(webpackConfig) {
+    return updateWebpackConfig(webpackConfig, this.query.config);
+  },
+};
+</code></pre></p>
+<p>是不是很简单，但是我们一定要注意，这里我们是配置的<code>'webpack.updateConfig'</code>,其会在<code>dora-plugin-webpack</code>被实例化的时候调用（注意，webpack.updateConfig必须是一个函数），调用的时候会传入我们的webpackConfig对象和我们自己指定的配置文件，很显然，在这里就是bisheng.config.js文件。是不是已经等不及看看我们的updateWebpackConfig函数到底是如何处理的？</p>
+<pre><code class="js">const bishengLib = path.join(__dirname, '..');
+const bishengLibLoaders = path.join(bishengLib, 'loaders');
+module.exports = function updateWebpackConfig(webpackConfig, configFile, isBuild) {
+  const config = getConfig(configFile);
+  webpackConfig.entry = {};
+  if (isBuild) {
+    webpackConfig.output.path = config.output;
+  }
+  webpackConfig.output.publicPath = isBuild ? config.root : '/';
+  webpackConfig.module.loaders.push({
+    test(filename) {
+      return filename === path.join(bishengLib, 'utils', 'data.js') ||
+        filename === path.join(bishengLib, 'utils', 'ssr-data.js');
+    },
+    loader: `${path.join(bishengLibLoaders, 'bisheng-data-loader')}` +
+      `?config=${configFile}&amp;isBuild=${isBuild}`,
+  });
+  webpackConfig.module.loaders.push({
+    test: /\.md$/,
+    exclude: /node_modules/,
+    loaders: [
+      'babel',
+      `${path.join(bishengLibLoaders, 'markdown-loader')}` +
+        `?config=${configFile}&amp;isBuild=${isBuild}`,
+    ],
+  });
+  const pluginsConfig = resolvePlugins(config.plugins, 'config');
+  pluginsConfig.forEach((pluginConfig) =&gt; {
+    require(pluginConfig[0])(pluginConfig[1]).webpackConfig(webpackConfig, webpack);
+  });
+  const customizedWebpackConfig = config.webpackConfig(webpackConfig, webpack);
+  const entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');
+  if (customizedWebpackConfig.entry[config.entryName]) {
+    throw new Error('Should not set `webpackConfig.entry.' + config.entryName + '`!');
+  }
+  customizedWebpackConfig.entry[config.entryName] = entryPath;
+  return customizedWebpackConfig;
+};
+</code></pre>
+
+<p>其中调用updateWebpackConfig的第三个参数是我们的isBuild参数,他会决定以下的内容：</p>
+<pre><code class="js">  if (isBuild) {
+    //如果isBuild为true，那么更新webpack.output.path为配置文件的output属性
+    //否则还是使用webpack.out.path默认的值
+    webpackConfig.output.path = config.output;
+  }
+  webpackConfig.output.publicPath = isBuild ? config.root : '/';
+  //如果是isBuild，那么output.pulicPath为配置文件的root值，否则输出路径为'/'
+  webpackConfig.module.loaders.push({
+    test(filename) {
+      return filename === path.join(bishengLib, 'utils', 'data.js') ||
+        filename === path.join(bishengLib, 'utils', 'ssr-data.js');
+    },
+    loader: `${path.join(bishengLibLoaders, 'bisheng-data-loader')}` +
+      `?config=${configFile}&amp;isBuild=${isBuild}`,
+  });
+  webpackConfig.module.loaders.push({
+    test: /\.md$/,
+    exclude: /node_modules/,
+    loaders: [
+      'babel',
+      `${path.join(bishengLibLoaders, 'markdown-loader')}` +
+        `?config=${configFile}&amp;isBuild=${isBuild}`,
+    ],
+  });
+//我们还需要把isBuild的值传入到各种loader中
+</code></pre>
+
+<p>总之，<em>如果isBuild为true，那么我们才会更新webpack的输出路径为我们的configFile文件指定的配置的值</em>。对于相应的文件的路径我们也做如下的说明：</p>
+<pre><code class="js">const bishengLib = path.join(__dirname, '..');
+const bishengLibLoaders = path.join(bishengLib, 'loaders');
+</code></pre>
+
+<p>也就是说我们的bishengLib就是指的bisheng这个module的lib目录，而bishengLibLoaders就是lib下的loaders文件夹！这里处理markdown文件引入了两个loader，分别为<code>'bisheng-data-loader'</code>和<code>'markdown-loader'</code>。</p>
+<h3 id="12-bishengjsloader"><a name="user-content-12-bishengjsloader" href="#12-bishengjsloader" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2 bisheng.js中的loader分析</h3>
+<h4 id="121-bisheng-data-loader"><a name="user-content-121-bisheng-data-loader" href="#121-bisheng-data-loader" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2.1 bisheng-data-loader分析</h4>
+<p>首先我们来分析下bisheng-data-loader这个loader:</p>
+<pre><code class="js">'use strict';
+const fs = require('fs');
+const path = require('path');
+const loaderUtils = require('loader-utils');
+const getConfig = require('../utils/get-config');
+const markdownData = require('../utils/markdown-data');
+const resolvePlugins = require('../utils/resolve-plugins');
+module.exports = function bishengDataLoader(/* content */) {
+  if (this.cacheable) {
+    this.cacheable();//loader缓存
+  }
+  const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  const isSSR = fullPath.endsWith('ssr-data.js');
+
+  const query = loaderUtils.parseQuery(this.query);
+  const config = getConfig(query.config);
+
+  const markdown = markdownData.generate(config.source);
+  //得到所有的source部分的markdown数据
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+  //解析所有的浏览器的plugin，也就是解析的是每一个模块的lib/browser
+  // const pluginName = path.join(snippets[0], 'lib', moduleName);
+  const pluginsString = browserPlugins.map(
+    (plugin) =&gt;
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+ //加载所有的browser模块，并通过join方法来合并起来
+  const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) =&gt; {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      //得到文件的内容
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //使用模块下面的node进行处理
+      Object.keys(config.pick).forEach((key) =&gt; {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+  //作为一个loader，我们必须按照指定的格式进行返回;但是必须是node的这种返回格式，也就是module.exports这种方式，这是CMD的方式
+  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+</code></pre>
+
+<p>第一步：首先下面表示是否缓存：<br />
+<pre><code class="js"> if (this.cacheable) {
+    this.cacheable();//loader缓存
+  }
+</code></pre></p>
+<p>第二步：接着是判断是否是ssr,具体可以参考<a href="http://www.tuicool.com/articles/iMfyqqF">ssr基本概念</a>。此处先不展开。可以参见bisheng-build内容<br />
+<pre><code class="js">   const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  const isSSR = fullPath.endsWith('ssr-data.js');
+</code></pre></p>
+<p>我们来看看loaderUtils.getRemainingRequest方法的内容：<br />
+<pre><code class="js">function dotRequest(obj) {
+  return obj.request;
+}
+exports.getRemainingRequest = function(loaderContext) {
+  if(loaderContext.remainingRequest)
+    return loaderContext.remainingRequest;
+  var request = loaderContext.loaders.slice(loaderContext.loaderIndex+1).map(dotRequest).concat([loaderContext.resource]);
+  return request.join(&quot;!&quot;);
+};
+</code></pre></p>
+<p>如果loaderContext.remainingRequest存在，那么直接返回，否则按下面处理：<br />
+   loaderContext.loaders获取所有的loader,而loaderContext.loaderIndex是获取当前loader在这个集合中的位置，然后或者右侧的<br />
+   loader的request对象组成一个数组。同时和loaderContext.resource也就是这个loader的最初的输入值合并起来，并把数组使用&rsquo;!&rsquo;连接<br />
+   这时候就成了我们以前的前面是所有的loader，并且不同的loader使用!连接，最后面的资源就是我们的初始资源！</p>
+<p><em>Pitching Loader</em><br />
+ The order of chained loaders are always called from right to left. But, in some cases, loaders do not care <br />
+about the results of the previous loader or the resource. They only care for metadata. <br />
+  The pitch method on the loaders is called from left to right before the loaders are called (from right to left).<br />
+If a loader delivers a result in the pitch method the process turns around and skips the remaining loaders, continuing <br />
+with the calls to the more left loaders. data can be passed between pitch and normal call.</p>
+<p>第三步：读取我们为bisheng-data-loader设置的配置文件<br />
+<pre><code class="js">  const query = loaderUtils.parseQuery(this.query);
+  const config = getConfig(query.config);
+</code></pre></p>
+<p>这里我们获取到的config文件其实就是配置的bisheng.config.js</p>
+<p>第四步:解析config文件中的source部分<br />
+<pre><code class="js"> const markdown = markdownData.generate(config.source);
+</code></pre></p>
+<p>那么这一步到底干了什么？我们首先看看config.source中配置的是什么<br />
+<pre><code class="js">source: [
+    './components',
+    './docs',
+    'CHANGELOG.zh-CN.md', // TODO: fix it in bisheng
+    'CHANGELOG.en-US.md',
+  ],
+</code></pre></p>
+<p>我们看看markdownData.generate做了什么？</p>
+<pre><code class="js">exports.generate = function generate(source) {
+  if (R.is(Object, source) &amp;&amp; !Array.isArray(source)) {
+    return R.mapObjIndexed((value) =&gt; generate(value), source);
+  } else {
+    const mds = findMDFile(ensureToBeArray(source));
+    const filesTree = filesToTreeStructure(mds);
+    return filesTree;
+  }
+};
+</code></pre>
+
+<p>是不是很简单，他首先找到这个source下的所有的mardown文件并返回一个数组(注意：这时候数组中返回的都是markdown文件的路径),然后把这个路径变成了树形结构。至于如何转化为树形结构的如下所示：</p>
+<pre><code class="js">function filesToTreeStructure(files) {
+  return files.reduce((filesTree, filename) =&gt; {
+    const propLens = R.lensPath(filename.replace(/\.md$/i, '').split(rxSep));
+    return R.set(propLens, filename, filesTree);
+  }, {});
+}
+</code></pre>
+
+<p>如果你不知道<a href="http://ramdajs.com/docs/#set">ramdajs</a>,那么可以好好看看！也就是说通过上面的处理，我们已经得到了markdown文件的属性结构对象了，如下：</p>
+<p>posts<br />
+├── a.md<br />
+└── b.md</p>
+<p>就会转化为如下结构：</p>
+<p>{<br />
+  posts: {<br />
+    a: //这里是文件路径<br />
+    b: //这里是文件路径<br />
+  },<br />
+}</p>
+<p>至此，我们的bisheng-data-loader该部分已经解释完毕，他的<code>作用就是把我们的bisheng.config.js配置文件source配置解析成为一个文件树，但是返回的文件树后面是文件的完整路径</code>。</p>
+<p>我们再来分析下bisheng-data-loader剩余的部分：<br />
+<pre><code class="js"> const browserPlugins = resolvePlugins(config.plugins, 'browser');
+</code></pre></p>
+<p>其中这里的config.plugins表示我们在bisheng.config.js配置的所有的plugins如下：<br />
+<pre><code class="js"> plugins: [
+    'bisheng-plugin-description',//抽取markdown文件的中间的description部分
+    'bisheng-plugin-toc?maxDepth=2&amp;keepElem',//产生一个table
+    'bisheng-plugin-react?lang=__react',//将markdown书写的jsx转换成为React.createElement
+    'bisheng-plugin-antd',
+  ]
+</code></pre></p>
+<p>我们看看resolvePlugins做了什么处理:<br />
+<pre><code class="js">module.exports = function resolvePlugins(plugins, moduleName) {
+  return plugins.map((plugin) =&gt; {
+    const snippets = plugin.split('?');//得到'bisheng-plugin-description'
+    const pluginName = path.join(snippets[0], 'lib', moduleName);//得到'bisheng-plugin-description/lib/config'
+    const pluginQuery = loaderUtils.parseQuery(snippets[1] ? `?${snippets[1]}` : '');
+    const resolvedPlugin = resolvePlugin(pluginName);//resolvePlugin会从顶级目录也就是cwd进行查找并得到路径
+    //解析插件
+    if (!resolvedPlugin) {
+      return false;
+    }
+    //返回插件和插件的查询字符串
+    return [
+      resolvedPlugin,
+      pluginQuery,
+    ];
+  }).filter(R.identity);
+};
+</code></pre></p>
+<p>我们看一下上面的一个函数resolvePlugin:<br />
+<pre><code class="js">function resolvePlugin(plugin) {
+  let result;
+  try {
+    result = resolve.sync(plugin, {
+      basedir: process.cwd(),
+    });
+  } catch (e) {} 
+  return result;
+}
+</code></pre></p>
+<p>这里我们是查找在bisheng.config.js中配置的plugin的相应<code>lib/browser</code>路径的插件名称，如果<code>lib/browser</code>下没有这个插件，那么我们返回false!那么你很容易就会明白上面那一句代码的意思了。我们继续往下分析：<br />
+<pre><code class="js">  const pluginsString = browserPlugins.map(
+    (plugin) =&gt;
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+</code></pre></p>
+<p>这里就很显然了，如果上面解析到lib/browser存在，那么就加载它并传入插件配置的时候的参数。我们继续往下分析：<br />
+<pre><code class="js">  const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) =&gt; {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      //得到文件的内容
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //使用模块下面的node进行处理
+      Object.keys(config.pick).forEach((key) =&gt; {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+</code></pre></p>
+<p>这里就是判断在bisheng.config.js中是否传入了pick参数，如果传入了pick参数那么我们做如下处理：</p>
+<p>首先：和上面解析插件下的lib/browser一样解析&rsquo;lib/node&rsquo;:<br />
+<pre><code class="js"> const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+</code></pre></p>
+<p>然后：我们对上面的返回的markdown文件树进行处理，处理后得到文件的内容(bisheng.config.js所有的文件路径都是相对于process.cwd进行配置)<br />
+<pre><code class="js">  markdownData.traverse(markdown, (filename) =&gt; {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      //得到文件的内容
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //使用模块下面的node进行处理
+      Object.keys(config.pick).forEach((key) =&gt; {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+</code></pre></p>
+<p>上面我么调用了markdownData.process方法，那么这个方法到底做了什么？<br />
+<pre><code class="js">exports.process = (filename, fileContent, plugins, isBuild/* 'undefined' | true */) =&gt; {
+  const markdown = markTwain(fileContent);
+  //我们没法直接处理markdown，所以我们可以通过mark-twain把他解析成为jsonML
+  markdown.meta.filename = filename;
+  //为jsonML的meta对象添加一个filename表示文件的路径
+  const parsedMarkdown = plugins.reduce(
+    (markdownData, plugin) =&gt;
+      require(plugin[0])(markdownData, plugin[1], isBuild === true),
+    markdown
+  );
+  return parsedMarkdown;
+};
+</code></pre></p>
+<p>这里我们对每一个文件内容都会使用&rsquo;lib/node&rsquo;下的文件都处理一次，我们给出bisheng-plugin-antd的一个例子，看看内部的处理：</p>
+<pre><code class="js">'use strict';
+var path = require('path');
+var processDoc = require('./process-doc');
+var processDemo = require('./process-demo');
+module.exports = function (markdownData, _, isBuild) {
+  var isDemo = /\/demo$/i.test(path.dirname(markdownData.meta.filename));
+  if (isDemo) {
+    return processDemo(markdownData, isBuild);
+  }
+  return processDoc(markdownData);
+};
+</code></pre>
+
+<p>注意：<br />
+<em>.</em>上面我们从markdown的文件名转化为文件内容只是传入了我们在bisheng.config.js中<code>lib/node</code>下的plugin</p>
+<p><em>.</em>从我们的这个bisheng-plugin-antd的例子我们可以知道，我们的插件只是关注第一个和第三个参数</p>
+<pre><code class="js">    const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+</code></pre>
+
+<p>所以说，经过这句代码的处理，我们得到的是jsonML并且该jsonML已经经历过我们在bisheng.config.js中配置的所有的插件的&rsquo;lib/node&rsquo;处理过了！我们接着分析：<br />
+<pre><code class="js">   Object.keys(config.pick).forEach((key) =&gt; {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        //得到我们的pick中配置的函数本身而不是函数key
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的jsonML数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+</code></pre></p>
+<p>注意：到这里我们就已经懂了吧，我们此处获取到的数据都是被转化为jsonML,同时经过bisheng.config.js中配置的plugin的lib/node处理过了，而且也经过我们在bisheng.config.js中配置的pick所有函数的处理了。</p>
+<pre><code class="js"> if (pickedData) {
+          picked[key].push(pickedData);
+        }
+</code></pre>
+
+<p>而且经过我们的pick处理后我们返回的对象的key就是函数的名称，而值就是经过这个函数处理后的结果！<em>每一个函数都会有一个自己的处理后的结果</em>。我们接着往下分析：</p>
+<pre><code class="js">  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+</code></pre>
+
+<p>我们看看在bisheng.config.js中如何配置我们的lazyload函数的：<br />
+<pre><code class="js">lazyLoad(nodePath, nodeValue) {
+    if (typeof nodeValue === 'string') {
+      return true;
+    }
+    return nodePath.endsWith('/demo');
+  },
+</code></pre></p>
+<p>也就是说我们配置了，<em>只有nodePath以&rsquo;/demo&rsquo;结尾，或者nodeValue是string才会使用懒加载</em>。</p>
+<p>而且我们这里传入stringify的markdown是通过调用下面的方法获取的：<br />
+<pre><code class="js"> const markdown = markdownData.generate(config.source);
+</code></pre></p>
+<p>上面已经分析过了，<em>generate就是把我们的bisheng.config.js配置文件source配置解析成为一个文件树，但是返回的文件树后面是文件的完整路径</em>。</p>
+<p>因为我们这里是一个loader，那么我们返回的必须是像上面这样包装过的，具体可以参考<a href="https://webpack.github.io/docs/loaders.html">loader写法</a>。我们也贴上上面用到的stringify函数：</p>
+<pre><code class="js">exports.stringify = (filesTree, lazyLoad, isSSR) =&gt;
+  stringify('/', filesTree, lazyLoad, isSSR, 0);
+</code></pre>
+
+<p>其实际上是调用下面的stringify函数的：</p>
+<pre><code class="js">//markdown部分调用：markdownData.stringify(markdown, config.lazyLoad, isSSR)
+function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  //'1'.repeat(undefined)=&gt;&quot;&quot;
+  const shouldBeLazy = shouldLazyLoad(nodePath, nodeValue, lazyLoad);
+  //这里返回的是给bisheng.config.js的lazyload函数传入了'/'和文件树对象返回的结果。如果在lazyload中判断这种情况返回为false，那么是不会懒加载的。cond函数是当前面一个条件满足的时候会执行后面的函数
+  return R.cond([
+    [(n) =&gt; typeof n === 'object', (obj) =&gt; {
+      if (shouldBeLazy) {
+        //如果是懒加载
+        const filePath = path.join(
+          __dirname, '..', '..', 'tmp',
+          nodePath.replace(/^\/+/, '').replace(/\//g, '-')
+        );
+        //&quot;/demo/button&quot;.replace(/^\/+/, '').replace(/\//g, '-')得到'demo-button'，这里nodePath因为是'/',所以返回&quot;&quot;
+        const fileContent = 'module.exports = ' +
+                `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
+          //对文件内容进行string化
+        fs.writeFileSync(filePath, fileContent);
+        //写到temp目录下我们的文件
+        return lazyLoadWrapper(filePath, nodePath.replace(/^\/+/, ''), isSSR);
+        //filePath此处是'/',返回一个promise对象进行lazyload
+      }
+       //如果不需要懒加载，那么我们直接调用stringifyObject就可以了
+      return `{\n${stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)}\n${indent}}`;
+    }],
+    [R.T, (filename) =&gt; {
+      const filePath = path.join(process.cwd(), filename);
+      //否则就执行这里的逻辑
+      if (shouldBeLazy) {
+        return lazyLoadWrapper(filePath, filename, isSSR);
+      }
+      return `require('${filePath}')`;
+    }],
+  ])(nodeValue);
+}
+</code></pre>
+
+<p>顺便看看我们的shouldLazyLoad方法：</p>
+<pre><code class="js">//其中我们的nodePath传入的&quot;/&quot;，而nodeValue就是我们的文件树，layLoad传入的是函数
+function shouldLazyLoad(nodePath, nodeValue, lazyLoad) {
+  if (typeof lazyLoad === 'function') {
+    return lazyLoad(nodePath, nodeValue);
+  }
+  return typeof nodeValue === 'object' ? false : lazyLoad;
+}
+</code></pre>
+
+<p>也就是说，<em>如果在bisheng.config.js中配置的lazyload是一个函数，那么这个函数会在这里传入两个参数&rdquo;/&rdquo;和我们的文件树对象,如果配置的函数返回false那么表示不是lazyload。如果不是传入的函数，那么文件树对象是object所以这里返回false</em>.</p>
+<p>layLoadWrapper如下：<br />
+<pre><code class="js">function lazyLoadWrapper(filePath, filename, isSSR) {
+  return 'function () {\n' +
+    '  return new Promise(function (resolve) {\n' +//此处为promise的resolve
+    (isSSR ? '' : '    require.ensure([], function (require) {\n') +
+    `      resolve(require('${filePath}'));\n` +
+    (isSSR ? '' : `    }, '${filename}');\n`) +
+    '  });\n' +
+    '}';
+}
+</code></pre></p>
+<p>此处表示isSSR如果为true，那么我们产生的Promise对象是空的，否则我们会通过懒加载的方式来加载文件，其是通过require.ensure来完成的，其第三个参数表示chunkname。<a href="http://blog.csdn.net/zhbhun/article/details/46826129">查看</a></p>
+<p>stringifyObject如下：<br />
+<pre><code class="js">function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const kvStrings = R.pipe(
+    R.toPairs,
+    R.map((kv) =&gt; //传入stringify第一个参数是key，第二个是我们的value
+          `${indent}  '${kv[0]}': ${stringify(nodePath + '/' + kv[0], kv[1], lazyLoad, isSSR, depth + 1)},`)
+  )(obj);
+  return kvStrings.join('\n');
+}
+</code></pre></p>
+<p>我们看到上面对stringifyObject进行调用：<br />
+<pre><code class="js"> stringifyObject(nodePath, obj, false, isSSR, 1)
+</code></pre></p>
+<p>他的作用就是把我们的文件树对象进行处理的，也就是这里的obj就是我们的文件树对象,nodePath就是我们的&rsquo;/&rsquo;。我们来自己分析下stringifyObject:</p>
+<pre><code class="js">R.toPairs({posts:{components:{path:&quot;Desktop/Components&quot;},demo:{path:'Desktop/demo'}},hosts:{}}); 
+//得到如下的结果
+[[&quot;posts&quot;, {&quot;components&quot;: {&quot;path&quot;: &quot;Desktop/Components&quot;}, &quot;demo&quot;: {&quot;path&quot;: &quot;Desktop/demo&quot;}}], [&quot;hosts&quot;, {}]]
+</code></pre>
+
+<p>所以通过bisheng-data-loader处理后我们会在temp目录下生成如下的内容：(除了entry.index.js和route.js):</p>
+<p><img alt="在temp目录下生成我们的demo内容" src="/Users/qingtian/Desktop/bisheng-sourceCode-plugin/demo.png" /></p>
+<p>那么我们其中的内容就是通过stringifyObject来生成的：<br />
+<pre><code class="js">function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const kvStrings = R.pipe(
+    R.toPairs,
+    R.map((kv) =&gt; //传入stringify第一个参数是key，第二个是我们的value
+          `${indent}  '${kv[0]}': ${stringify(nodePath + '/' + kv[0], kv[1], lazyLoad, isSSR, depth + 1)},`)
+  )(obj);
+  return kvStrings.join('\n');
+}
+</code></pre></p>
+<p>其中内容就是如下的内容形式：</p>
+<pre><code class="js">module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/basic.md'),
+    'button-group': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/button-group.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/disabled.md'),
+    'icon': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/icon.md'),
+    'loading': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/loading.md'),
+    'multiple': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/multiple.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/size.md'),
+}
+</code></pre>
+
+<p>至于为什么是上面这种类型，请看下面的内容：<br />
+<pre><code class="js">function filesToTreeStructure(files) {
+  return files.reduce((filesTree, filename) =&gt; {
+    const propLens = R.lensPath(filename.replace(/\.md$/i, '').split(rxSep));
+    return R.set(propLens, filename, filesTree);
+  }, {});
+}
+</code></pre></p>
+<p>这里就很容易理解了把，至少require中的文件名就是这么得到的。那么具体的内容就只有查看下面这个stringify函数了(stringifyObject实际上也是调用stringify)：<br />
+<pre><code class="js">function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const shouldBeLazy = shouldLazyLoad(nodePath, nodeValue, lazyLoad);
+  return R.cond([
+    [(n) =&gt; typeof n === 'object', (obj) =&gt; { //这里会接受到后面的nodeValue作为参数
+      if (shouldBeLazy) {
+        const filePath = path.join(
+          __dirname, '..', '..', 'tmp',
+          nodePath.replace(/^\/+/, '').replace(/\//g, '-')
+        );
+        const fileContent = 'module.exports = ' +
+                `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
+        fs.writeFileSync(filePath, fileContent);
+        return lazyLoadWrapper(filePath, nodePath.replace(/^\/+/, ''), isSSR);
+      }
+      return `{\n${stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)}\n${indent}}`;
+    }],
+    [R.T, (filename) =&gt; {
+      const filePath = path.join(process.cwd(), filename);
+      if (shouldBeLazy) {
+        return lazyLoadWrapper(filePath, filename, isSSR);
+      }
+      return `require('${filePath}')`;
+    }],
+  ])(nodeValue);
+}
+</code></pre></p>
+<p>至此，我们的bisheng-data-loader已经分析结束</p>
+<h4 id="122-markdown-loader"><a name="user-content-122-markdown-loader" href="#122-markdown-loader" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2.2 markdown-loader</h4>
+<p>我们看看这个loader是如何配置的：<br />
+<pre><code class="js"> webpackConfig.module.loaders.push({
+    test: /\.md$/,//这是处理我们的markdown文件
+    exclude: /node_modules/,
+    loaders: [
+      'babel',
+      `${path.join(bishengLibLoaders, 'markdown-loader')}` +
+        `?config=${configFile}&amp;isBuild=${isBuild}`,
+    ],
+  });
+</code></pre></p>
+<p>很显然，我们这里依然传入我们bisheng.config.js的配置文件进行处理，下面是这loader的源码：</p>
+<pre><code class="js">module.exports = function markdownLoader(content) {
+  if (this.cacheable) {
+    //loader缓存
+    this.cacheable();
+  }
+  const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  //这个在上面已经分析过了
+  const filename = path.relative(process.cwd(), fullPath);
+  //从cwd开始查找我们的这个模块的路径
+  const query = loaderUtils.parseQuery(this.query);
+  const plugins = resolvePlugins(getConfig(query.config).plugins, 'node');
+  //这里我们还是获取在bisheng.config.js中配置的plugins的lib/node下的文件
+  const parsedMarkdown = markdownData.process(filename, content, plugins, query.isBuild);
+  //这里我们对每一个文件内容都会使用'lib/node'下的文件都处理一次，得到的依然是JsonML
+  return `module.exports = ${stringify(parsedMarkdown)};`;
+};
+</code></pre>
+
+<p>我们再来看看此时调用的stringify方法，该方法传入了我们的jsonML内容:</p>
+<pre><code class="js">function stringify(node, depth = 0) {
+  const indent = '  '.repeat(depth);
+  //字符串有repeat方法了
+  if (Array.isArray(node)) {
+    return `[\n` +
+      node.map(item =&gt; `${indent}  ${stringify(item, depth + 1)}`).join(',\n') +
+      `\n${indent}]`;
+  }
+  //如果是数组，那么对其中每一个元素进行处理
+  if (
+    typeof node === 'object' &amp;&amp;
+      node !== null &amp;&amp;
+      !(node instanceof Date)
+  ) {
+    if (node.__BISHENG_EMBEDED_CODE) {
+      return node.code;
+    }
+    return `{\n` +
+      Object.keys(node).map((key) =&gt; {
+        const value = node[key];
+        return `${indent}  &quot;${key}&quot;: ${stringify(value, depth + 1)}`;
+      }).join(',\n') +
+      `\n${indent}}`;
+  }
+  //否则通过JSON.stringify来处理
+  return JSON.stringify(node, null, 2);
+}
+</code></pre>
+
+<p>现在这个<code>markdown-loader</code>对我来说来说就是对上面bisheng-data-loader得到的结果进行进一步的处理，如下就是我们一个处理：<br />
+<pre><code class="js">'use strict';
+var path = require('path');
+var processDoc = require('./process-doc');
+var processDemo = require('./process-demo');
+module.exports = function (markdownData, _, isBuild) {
+  var isDemo = /\/demo$/i.test(path.dirname(markdownData.meta.filename));
+  if (isDemo) {
+    return processDemo(markdownData, isBuild);
+  }
+  return processDoc(markdownData);
+};
+</code></pre></p>
+<p>其就是对我们的markdown中的demo部分进行的处理！总之，<em>markdown-loader就是对我们的解析出来的markdown中的代码而不是文件本身进行处理</em>！</p>
+<p>我们继续分析updateWebpackConfig的剩余部分，上面已经说过了他的两个loader，分别为bisheng-data-loader和markdown-loader。</p>
+<p>接下来我们分析出我们在bisheng.config.js中配置的plugin的lib/config文件<br />
+<pre><code class="js">  const pluginsConfig = resolvePlugins(config.plugins, 'config');
+</code></pre></p>
+<p>我们知道resolvePlugins返回的是如下的数组：<br />
+<pre><code class="js">return [
+      resolvedPlugin,
+      pluginQuery,
+    ];
+</code></pre></p>
+<p>分别表示<code>插件的query字段和plugin的文件路径</code></p>
+<p>然后我们获取这个lib/config文件并传入<br />
+<pre><code class="js">pluginsConfig.forEach((pluginConfig) =&gt; {
+    require(pluginConfig[0])(pluginConfig[1]).webpackConfig(webpackConfig, webpack);
+  });
+</code></pre></p>
+<p>我们再看看lib/config文件是什么类型：<br />
+<pre><code class="js">'use strict';
+const path = require('path');
+function generateQuery(config) {
+  return Object.keys(config)
+    .map((key) =&gt; `${key}=${config[key]}`)
+    .join('&amp;');
+}
+module.exports = (config) =&gt; {
+  //这里的config就是query字段
+  return {
+    webpackConfig(bishengWebpackConfig) {
+      bishengWebpackConfig.module.loaders.forEach((loader) =&gt; {
+        if (loader.test.toString() !== '/\\.md$/') return;
+        //直接返回
+        const babelIndex = loader.loaders.indexOf('babel');
+        const query = generateQuery(config);
+        loader.loaders.splice(babelIndex + 1, 0, path.join(__dirname, `jsonml-react-loader?${query}`));
+      });
+      return bishengWebpackConfig;
+    },
+  };
+};
+</code></pre></p>
+<p>所以上面表示使用bisheng.config.js中的lib/config对我们的webpack配置进行进一步的处理。我们接着分析：<br />
+<pre><code class="js">const customizedWebpackConfig = config.webpackConfig(webpackConfig, webpack);
+</code></pre></p>
+<p>这表示调用我们的bisheng.config.js中的webpackConfig方法，我们看看在bisheng.config.js中是如何配置的：<br />
+<pre><code class="js">  webpackConfig(config) {
+    config.resolve.alias = {
+      'antd/lib': path.join(process.cwd(), 'components'),
+      antd: process.cwd(),
+      site: path.join(process.cwd(), 'site'),
+      'react-router': 'react-router/umd/ReactRouter',
+    };
+    config.plugins.push(new CSSSplitWebpackPlugin({ preserve: true }));
+    config.babel.plugins.push([
+      require.resolve('babel-plugin-transform-runtime'),
+      {
+        polyfill: false,
+        //不会改变实例方法
+        regenerator: true,
+        //Automatically requires babel-runtime/regenerator when you use generators/async functions.
+      },
+    ]);
+
+    config.babel.plugins.push([
+      require.resolve('babel-plugin-import'),
+      {
+        style: true,//style设置为true表示引入less文件和js文件，否则只是引入js文件，如果style设置为'css'表示只会引入js/css而不会引入less
+        libraryName: 'antd',//名称
+        libraryDirectory: 'components',//目录，默认是'lib'目录
+      },
+    ]);
+    //这是一个模块加载插件，兼容antd,antd-mobile方法
+    return config;
+  }
+</code></pre></p>
+<p>我们在这个方法中会传入webpackConfig对象,这里你可以对webpackConfig进行进一步的处理。我们继续往下分析：<br />
+<pre><code class="js">const entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');
+  if (customizedWebpackConfig.entry[config.entryName]) {
+    throw new Error('Should not set `webpackConfig.entry.' + config.entryName + '`!');
+  }
+  customizedWebpackConfig.entry[config.entryName] = entryPath;
+</code></pre></p>
+<p>这表示我们在<code>bisheng.config.js中是不能配置entry的，我们设置了webpack默认的入口文件是cwd/tmp/entry.index.js</code>。</p>
+<h4 id="123"><a name="user-content-123" href="#123" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2.3 总结</h4>
+<p>在总结之前我们还是贴一下上面分析的代码：<br />
+<pre><code class="js">module.exports = function updateWebpackConfig(webpackConfig, configFile, isBuild) {
+  const config = getConfig(configFile);
+  webpackConfig.entry = {};
+  if (isBuild) {
+    webpackConfig.output.path = config.output;
+  }
+  webpackConfig.output.publicPath = isBuild ? config.root : '/';
+  webpackConfig.module.loaders.push({
+    test(filename) {
+      return filename === path.join(bishengLib, 'utils', 'data.js') ||
+        filename === path.join(bishengLib, 'utils', 'ssr-data.js');
+    },
+    loader: `${path.join(bishengLibLoaders, 'bisheng-data-loader')}` +
+      `?config=${configFile}&amp;isBuild=${isBuild}`,
+  });
+  webpackConfig.module.loaders.push({
+    test: /\.md$/,
+    exclude: /node_modules/,
+    loaders: [
+      'babel',
+      `${path.join(bishengLibLoaders, 'markdown-loader')}` +
+        `?config=${configFile}&amp;isBuild=${isBuild}`,
+    ],
+  });
+  const pluginsConfig = resolvePlugins(config.plugins, 'config');
+  pluginsConfig.forEach((pluginConfig) =&gt; {
+    require(pluginConfig[0])(pluginConfig[1]).webpackConfig(webpackConfig, webpack);
+  });
+  const customizedWebpackConfig = config.webpackConfig(webpackConfig, webpack);
+  const entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');
+  if (customizedWebpackConfig.entry[config.entryName]) {
+    throw new Error('Should not set `webpackConfig.entry.' + config.entryName + '`!');
+  }
+  customizedWebpackConfig.entry[config.entryName] = entryPath;
+  return customizedWebpackConfig;
+};
+</code></pre></p>
+<p><u>注意</u>:虽然我们配置了相应的loader，但是并不是马上执行的，而是要等webpack真正加载的时候才会起作用，但是我们最后获取bisheng.config.js中的&rsquo;lib/config&rsquo;文件来修改webpack的配置文件确是马上生效的，同时我们在这里来自己指定了webpack的默认的入口文件是&rsquo;temp/entry.index.js&rsquo;。</p>
+<h3 id="2-bisheng"><a name="user-content-2-bisheng" href="#2-bisheng" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. bisheng插件机制</h3>
+<h4 id="21"><a name="user-content-21" href="#21" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 插件原理分析</h4>
+<pre><code class="js">module.exports = function bishengDataLoader(/* content */) {
+  if (this.cacheable) {
+    this.cacheable();
+  }
+  const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  const isSSR = fullPath.endsWith('ssr-data.js');
+  const query = loaderUtils.parseQuery(this.query);
+  const config = getConfig(query.config);
+  const markdown = markdownData.generate(config.source);
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+  const pluginsString = browserPlugins.map(
+    (plugin) =&gt;
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+  const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) =&gt; {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      Object.keys(config.pick).forEach((key) =&gt; {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+</code></pre>
+
+<p>上面的内容我已经详细分析过了，但是我们这里关注的是其中的两段代码，分别为：<br />
+<pre><code class="js">  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+</code></pre></p>
+<p>还有如下的部分：<br />
+<pre><code class="js"> const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+</code></pre></p>
+<p>也就是说我们在每一个loader里面可以为他添加上面两种，也就是可以添加&rsquo;lib/node&rsquo;和&rsquo;lib/browser&rsquo;这两个文件，其分别会被调用，当然还可以添加另外一种来更新webpack的配置：<br />
+<pre><code class="js"> const pluginsConfig = resolvePlugins(config.plugins, 'config');
+</code></pre></p>
+<p>不过这里是解析相应的plugin下的lib/config文件，是用来修改webpack配置信息的。而和上面的具有本质的区别，因为上面相当于为bisheng.js添加相应的plugin，这些plugin会在webpack加载了<code>bisheng-data-loader</code>后执行,而这个loader是在真正加载文件的时候起作用的。</p>
+<h4 id="22"><a name="user-content-22" href="#22" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.2 常见插件的解析</h4>
+<h5 id="221-bisheng-plugin-description"><a name="user-content-221-bisheng-plugin-description" href="#221-bisheng-plugin-description" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.2.1 bisheng-plugin-description</h5>
+<p>这个plugin的代码很简单，是在&rsquo;lib/node.js&rsquo;,内容如下：<br />
+<code>js
+'use strict';
+const JsonML = require('jsonml.js/lib/utils');
+module.exports = (markdownData) =&gt; {
+  const content = markdownData.content;
+  const contentChildren = JsonML.getChildren(content);
+  const dividerIndex = contentChildren.findIndex((node) =&gt; JsonML.getTagName(node) === 'hr');
+  if (dividerIndex &gt;= 0) {
+    markdownData.description = ['section']
+      .concat(contentChildren.slice(0, dividerIndex));
+    markdownData.content = [
+      JsonML.getTagName(content),
+      JsonML.getAttributes(content) || {},
+    ].concat(contentChildren.slice(dividerIndex + 1));
+  }
+  return markdownData;
+};</code></p>
+<p>上面这句代码不知道你是否还记得：</p>
+<pre><code class="js">
+</code></pre></article></body></html>

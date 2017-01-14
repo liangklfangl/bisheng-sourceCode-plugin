@@ -284,13 +284,6 @@ exports.traverse = function traverse(filesTree, fn) {
 exports.process = (filename, fileContent, plugins, isBuild/* 'undefined' | true */) => {
   const markdown = markTwain(fileContent);
   markdown.meta.filename = filename;
-  /*
-   这里的plugins中每一个元素都是如下的格式：
-   [
-      resolvedPlugin,
-      pluginQuery,
-    ]
-  */
   const parsedMarkdown = plugins.reduce(
     (markdownData, plugin) =>
       require(plugin[0])(markdownData, plugin[1], isBuild === true),

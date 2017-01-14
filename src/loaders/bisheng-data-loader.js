@@ -28,7 +28,6 @@ module.exports = function bishengDataLoader(/* content */) {
   const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
   const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
   const isSSR = fullPath.endsWith('ssr-data.js');
- 
   const query = loaderUtils.parseQuery(this.query);
   const config = getConfig(query.config);
 

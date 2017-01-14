@@ -930,6 +930,424 @@ module.exports = function updateWebpackConfig(webpackConfig, configFile, isBuild
 
 <u>注意</u>:虽然我们配置了相应的loader，但是并不是马上执行的，而是要等webpack真正加载的时候才会起作用，但是我们最后获取bisheng.config.js中的'lib/config'文件来修改webpack的配置文件确是马上生效的，同时我们在这里来自己指定了webpack的默认的入口文件是'temp/entry.index.js'。
 
+### 2. bisheng插件机制
+
+#### 2.1 插件原理分析
+```js
+module.exports = function bishengDataLoader(/* content */) {
+  if (this.cacheable) {
+    this.cacheable();
+  }
+  const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  const isSSR = fullPath.endsWith('ssr-data.js');
+  const query = loaderUtils.parseQuery(this.query);
+  const config = getConfig(query.config);
+  const markdown = markdownData.generate(config.source);
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+  const pluginsString = browserPlugins.map(
+    (plugin) =>
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+  const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) => {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      Object.keys(config.pick).forEach((key) => {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+```
+
+上面的内容我已经详细分析过了，但是我们这里关注的是其中的两段代码，分别为：
+```js
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+```
+
+还有如下的部分：
+```js
+ const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+```
+
+也就是说我们在每一个loader里面可以为他添加上面两种，也就是可以添加'lib/node'和'lib/browser'这两个文件，其分别会被调用，当然还可以添加另外一种来更新webpack的配置：
+```js
+ const pluginsConfig = resolvePlugins(config.plugins, 'config');
+```
+
+不过这里是解析相应的plugin下的lib/config文件，是用来修改webpack配置信息的。而和上面的具有本质的区别，因为上面相当于为bisheng.js添加相应的plugin，这些plugin会在webpack加载了`bisheng-data-loader`后执行,而这个loader是在真正加载文件的时候起作用的。
+
+#### 2.2 常见插件的解析
+
+##### 2.2.1 bisheng-plugin-description
+  
+ 这个plugin的代码很简单，是在'lib/node.js',内容如下：
+ ```js
+'use strict';
+const JsonML = require('jsonml.js/lib/utils');
+module.exports = (markdownData) => {
+  //前面的plugin已经对'lib/node.js'进行了相应的处理，处理的结果传入到这里进行进一步处理
+  const content = markdownData.content;
+  const contentChildren = JsonML.getChildren(content);
+  //得到我们的content的内容,而去除我们的属性部分
+  const dividerIndex = contentChildren.findIndex((node) => JsonML.getTagName(node) === 'hr');
+  //获取我们的内容的hr
+  if (dividerIndex >= 0) {
+    markdownData.description = ['section']
+      .concat(contentChildren.slice(0, dividerIndex));
+    markdownData.content = [
+      JsonML.getTagName(content),
+      JsonML.getAttributes(content) || {},
+    ].concat(contentChildren.slice(dividerIndex + 1));
+  }
+  return markdownData;
+};
+ ```
+
+上面这句代码不知道你是否还记得：
+
+```js
+   const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) => {
+      //这里的markdown是我们的文件树
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      //得到文件的内容
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //使用模块下面的node进行处理
+      Object.keys(config.pick).forEach((key) => {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+```
+
+其中传入traverse方法的markdown是我们的文件树，我们每次会获取到文件内容并把这个内容传入到我们的plugin下的'lib/node'进行处理，同时相应的插件的`lib/node`处理后，我们会把处理后的内容传递给我们相应的pick配置函数进行进一步处理。我们把上面的process方法再贴上一次代码：
+```js
+exports.process = (filename, fileContent, plugins, isBuild/* 'undefined' | true */) => {
+  const markdown = markTwain(fileContent);//转化为jsonML
+  markdown.meta.filename = filename;//添加文件路径
+  const parsedMarkdown = plugins.reduce(
+    (markdownData, plugin) =>
+      require(plugin[0])(markdownData, plugin[1], isBuild === true),
+    markdown//传入jsonML内容进行处理
+  );
+  return parsedMarkdown;
+};
+```
+
+通过这里你可以看到，传入到我们的bisheng-plugin-description的值是经过了相应的前面的node插件进行处理后的结果。(`比如有10个plugin有lib/node目录，那么就是到当前lib/node后，前面已经处理后的结果了`)。我们再来分析上面的bisheng-plugin-description：
+
+首先，因为我们在上面的process方法中的文件内容是经过[mark-twain](https://github.com/liangklfang/mark-twain)处理过的，所以我们获取其中的content部分，而meta部分的解析是通过[js-yaml-front-matter](https://github.com/liangklfang/js-yaml-front-matter)进行解析出来的
+```js
+const content = markdownData.content;
+```
+
+我们获取内容部分，内容部分我们会查看`'hr'`标签，如果hr标签存在，那么hr标签以前的内容全部是我们的description部分，而后面的内容表示content部分，而以前的通过[js-yaml-front-matter](https://github.com/liangklfang/js-yaml-front-matter)解析出来的content的所有的属性会原封不动的封装到我们的content部分上面！
+```js
+ const dividerIndex = contentChildren.findIndex((node) => JsonML.getTagName(node) === 'hr');
+  if (dividerIndex >= 0) {
+    markdownData.description = ['section']
+      .concat(contentChildren.slice(0, dividerIndex));
+      //hr标签以前表示description部分
+    markdownData.content = [
+      JsonML.getTagName(content),
+      JsonML.getAttributes(content) || {},//获取属性
+    ].concat(contentChildren.slice(dividerIndex + 1));
+  }
+```
+
+总结：bisheng-plugin-description这个plugin就是把所有的'lib/node'处理过得到的jsonML进行进一步的拆分，得到我们的`content和description`部分。总之，插件是在loader前面起作用的，`在loader起作用的时候会执行相应的plugin下的lib下的node.js/browser.js/config.js文件等，并传入相应的经过前面所有的plugin处理的jsonML`。
+
+#### 2.2.2 bisheng-plugin-toc
+
+源码如下：lib/node.js
+```js
+'use strict';
+const JsonML = require('jsonml.js/lib/utils');
+function isHeading(tagName) {
+  return /^h[1-6]$/i.test(tagName);
+}
+module.exports = (markdownData, config) => {
+  //markdownData是经过前面所有的plugin进行处理的jsonML
+  const maxDepth = config.maxDepth || 6;
+  //默认有6个空格
+  const listItems = JsonML.getChildren(markdownData.content).filter((node) => {
+    const tagName = JsonML.getTagName(node);
+    return isHeading(tagName) && +tagName.charAt(1) <= maxDepth;
+    //我们获取content中的h1-h6标签返回
+  }).map((node) => {
+    //这时候遍历的都是我们的h1-h6标签
+    const tagName = JsonML.getTagName(node);
+    //获取这个标签的tagName
+    const headingNodeChildren = JsonML.getChildren(node);
+    //获取每一个标签的内容，如<h1>content</h1>就是获取content部分
+    const headingText = headingNodeChildren.map((node) => {
+      if (JsonML.isElement(node)) {
+        if (JsonML.hasAttributes(node)) {
+          return node[2] || '';
+        }
+        return node[1] || '';
+      }
+      return node;
+    }).join('');
+    //我们这里是获取到了每一个h1-h6的内容部分，并把这些内容链接起来
+    const headingTextId = headingText.trim().replace(/\s+/g, '-');
+    //把空格使用'-'符号进行合并起来
+    return [
+      'li', [
+        'a',
+        {
+          className: `bisheng-toc-${tagName}`,//每一个a添加相应的class
+          href: `#${headingTextId}`,
+        },
+      ].concat(config.keepElem ? headingNodeChildren : [headingText]),
+      //config.keepElem表示是否保持element，其中headingNodeChildren包括元素标签
+    ];
+  });
+  //每一个返回的元素都是<ul><li><a class="bisheng-toc-h3"></a></li></ul>
+  markdownData.toc = ['ul'].concat(listItems);
+  return markdownData;
+};
+```
+
+我们这里导出的函数有两个参数，你是否感到疑惑，我们看看process方法你就知道了
+```js
+exports.process = (filename, fileContent, plugins, isBuild/* 'undefined' | true */) => {
+  const markdown = markTwain(fileContent);
+  markdown.meta.filename = filename;
+  const parsedMarkdown = plugins.reduce(
+    (markdownData, plugin) =>
+      require(plugin[0])(markdownData, plugin[1], isBuild === true),
+    markdown
+  );
+  return parsedMarkdown;
+};
+```
+
+而且我们在resolvePlugins中解析出来的插件本来就是包含插件本身和插件的query字段的：
+```js
+module.exports = function resolvePlugins(plugins, moduleName) {
+  return plugins.map((plugin) => {
+    const snippets = plugin.split('?');//得到'bisheng-plugin-description'
+    const pluginName = path.join(snippets[0], 'lib', moduleName);//得到'bisheng-plugin-description/lib/config'
+    const pluginQuery = loaderUtils.parseQuery(snippets[1] ? `?${snippets[1]}` : '');
+    const resolvedPlugin = resolvePlugin(pluginName);//resolvePlugin会从顶级目录也就是cwd进行查找并得到路径
+    //解析插件
+    if (!resolvedPlugin) {
+      return false;
+    }
+    //返回插件和插件的查询字符串
+    return [
+      resolvedPlugin,
+      pluginQuery,
+    ];
+  }).filter(R.identity);
+};
+```
+
+总之，bisheng-plugin-toc就是返回一个类似于下面的结构：
+```html
+<ul>
+  <li>
+    <a class="bisheng-toc-h3">heading text</a>
+  </li>
+</ul>
+```
+
+#### 2.2.3 bisheng-plugin-react
+
+##### 2.2.3.1 bisheng-plugin-react/lib/browser.js
+源码部分如下：
+```js
+'use strict';
+var React = require('react');
+module.exports = function() {
+  return {
+    converters: [
+      [
+        function(node) { return typeof node === 'function'; },
+        function(node, index) {
+          return React.cloneElement(node(), { key: index });
+        },
+      ],
+    ],
+  };
+};
+```
+
+##### 2.2.3.1 bisheng-plugin-react/lib/config.js
+下面是源码内容：
+```js
+'use strict';
+const path = require('path');
+function generateQuery(config) {
+  return Object.keys(config)
+    .map((key) => `${key}=${config[key]}`)
+    .join('&');
+}
+module.exports = (config) => {
+  return {
+    webpackConfig(bishengWebpackConfig) {
+      bishengWebpackConfig.module.loaders.forEach((loader) => {
+        if (loader.test.toString() !== '/\\.md$/') return;
+        const babelIndex = loader.loaders.indexOf('babel');
+        const query = generateQuery(config);
+        loader.loaders.splice(babelIndex + 1, 0, path.join(__dirname, `jsonml-react-loader?${query}`));
+      });
+      return bishengWebpackConfig;
+    },
+  };
+};
+```
+
+在这个config.js中我们引入了jsonml-react-loader，我们看看其中的内容：
+```js
+'use strict';
+const loaderUtils = require('loader-utils');
+const generator = require('babel-generator').default;
+const transformer = require('./transformer');
+module.exports = function jsonmlReactLoader(content) {
+  if (this.cacheable) {
+    this.cacheable();
+  }
+  const query = loaderUtils.parseQuery(this.query);
+  const lang = query.lang || 'react-example';
+  const res = transformer(content, lang);
+  const inputAst = res.inputAst;
+  const imports = res.imports;
+  for (let k = 0; k < imports.length; k++) {
+    inputAst.program.body.unshift(imports[k]);
+  }
+  const code = generator(inputAst, null, content).code;
+  const noreact = query.noreact;
+  if (noreact) {
+    return code;
+  }
+  return 'import React from \'react\';\n' +
+    'import ReactDOM from \'react-dom\';\n' +
+    code;
+};
+```
+
+我们看看transformer中的处理的代码：
+```js
+'use strict';
+
+const babylon = require('babylon');
+const types = require('babel-types');
+const traverse = require('babel-traverse').default;
+
+function parser(content) {
+  return babylon.parse(content, {
+    sourceType: 'module',
+    plugins: [
+      'jsx',
+      'flow',
+      'asyncFunctions',
+      'classConstructorCall',
+      'doExpressions',
+      'trailingFunctionCommas',
+      'objectRestSpread',
+      'decorators',
+      'classProperties',
+      'exportExtensions',
+      'exponentiationOperator',
+      'asyncGenerators',
+      'functionBind',
+      'functionSent',
+    ],
+  });
+}
+module.exports = function transformer(content, lang) {
+  let imports = [];
+  const inputAst = parser(content);
+  traverse(inputAst, {
+    ArrayExpression: function(path) {
+      const node = path.node;
+      const firstItem = node.elements[0];
+      const secondItem = node.elements[1];
+      let renderReturn;
+      if (firstItem &&
+        firstItem.type === 'StringLiteral' &&
+        firstItem.value === 'pre' &&
+        secondItem.properties[0].value.value === lang) {
+        let codeNode = node.elements[2].elements[1];
+        let code = codeNode.value;
+        const codeAst = parser(code);
+        traverse(codeAst, {
+          ImportDeclaration: function(importPath) {
+            imports.push(importPath.node);
+            importPath.remove();
+          },
+          CallExpression: function(CallPath) {
+            const CallPathNode = CallPath.node;
+            if (CallPathNode.callee &&
+              CallPathNode.callee.object &&
+              CallPathNode.callee.object.name === 'ReactDOM' &&
+              CallPathNode.callee.property &&
+              CallPathNode.callee.property.name === 'render') {
+
+              renderReturn = types.returnStatement(
+                CallPathNode.arguments[0]
+              );
+              CallPath.remove();
+            }
+          },
+        });
+        const astProgramBody = codeAst.program.body;
+        const codeBlock = types.BlockStatement(astProgramBody);
+        // ReactDOM.render always at the last of preview method
+        if (renderReturn) {
+          astProgramBody.push(renderReturn);
+        }
+        const coceFunction = types.functionExpression(
+          types.Identifier('jsonmlReactLoader'),
+          [],
+          codeBlock
+        );
+        path.replaceWith(coceFunction);
+      }
+    },
+  });
+  return {
+    imports: imports,
+    inputAst: inputAst,
+  };
+};
+```
+
+
+
+
+
+
+
 
 
 
