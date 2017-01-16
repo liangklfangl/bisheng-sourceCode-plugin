@@ -104,7 +104,6 @@ module.exports = function updateWebpackConfig(webpackConfig, configFile, isBuild
   pluginsConfig.forEach((pluginConfig) => {
     require(pluginConfig[0])(pluginConfig[1]).webpackConfig(webpackConfig, webpack);
   });
-
   const customizedWebpackConfig = config.webpackConfig(webpackConfig, webpack);
 
   const entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');

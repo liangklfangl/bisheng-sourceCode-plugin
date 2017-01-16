@@ -1188,7 +1188,7 @@ module.exports = function resolvePlugins(plugins, moduleName) {
 'use strict';
 var React = require('react');
 module.exports = function() {
-  return {
+  return {//返回的这个对象会经过JSON.stringify处理后得到字符串
     converters: [
       [
         function(node) { return typeof node === 'function'; },
@@ -1201,7 +1201,74 @@ module.exports = function() {
 };
 ```
 
+这里讲到了'lib/browser'部分，我们看看这部分是如何调用的，下面这句代码来自于bisheng-data-loader:
+```js
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+  //解析所有的浏览器的plugin，也就是解析的是每一个模块的lib/browser
+  const pluginsString = browserPlugins.map(
+    (plugin) =>
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+   return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+```
+
+也就是说我们分别加载指定的插件，然后给这些插件加上我们的查询字符串。同时把每一个`'lib/browser'`的插件返回的结果转化为字符串链接起来。所以说在bisheng-data-loader中我们返回的对象含有如下的部分：
+```js
+ return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+```
+
+`markdown`:表示我们把markdown文件树转化为字符串得到的结果
+
+`plugins`:表示我们在bisheng.config.js中配置的plugin的'lib/browser'返回的结果的字符串连接的结果
+
+`picked`:就是我们的文件内容转化为jsonML的结果,并且这些内容也经过了我们在bisheng.config.js中配置的pick函数的处理后的结果
+
+```js
+ const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) => {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      //得到文件的内容
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //使用模块下面的node进行处理
+      Object.keys(config.pick).forEach((key) => {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+```
+
 ##### 2.2.3.1 bisheng-plugin-react/lib/config.js
+
+在update-webpack-config中我们知道，这部分代码我们是用来进一步修改webpack的配置信息的，如下：
+```js
+  const pluginsConfig = resolvePlugins(config.plugins, 'config');
+  pluginsConfig.forEach((pluginConfig) => {
+    require(pluginConfig[0])(pluginConfig[1]).webpackConfig(webpackConfig, webpack);
+  });
+```
+
 下面是源码内容：
 ```js
 'use strict';
@@ -1212,12 +1279,16 @@ function generateQuery(config) {
     .join('&');
 }
 module.exports = (config) => {
+//第一个参数是我们的bisheng-plugin-react插件的时候的query字段
   return {
     webpackConfig(bishengWebpackConfig) {
+      //这里传入的是我们的webpackConfig对象，用于进一步更新
       bishengWebpackConfig.module.loaders.forEach((loader) => {
         if (loader.test.toString() !== '/\\.md$/') return;
+        //我们这里仅仅是处理markdown文件的
         const babelIndex = loader.loaders.indexOf('babel');
         const query = generateQuery(config);
+        //得到插件配置的时候query字段
         loader.loaders.splice(babelIndex + 1, 0, path.join(__dirname, `jsonml-react-loader?${query}`));
       });
       return bishengWebpackConfig;
@@ -1226,47 +1297,70 @@ module.exports = (config) => {
 };
 ```
 
-在这个config.js中我们引入了jsonml-react-loader，我们看看其中的内容：
+在这个config.js中我们引入了`jsonml-react-loader`，我们看看其中的内容：
+
 ```js
 'use strict';
 const loaderUtils = require('loader-utils');
 const generator = require('babel-generator').default;
 const transformer = require('./transformer');
+//传入的是文件的内容，经过转化得到的jsonML
 module.exports = function jsonmlReactLoader(content) {
   if (this.cacheable) {
     this.cacheable();
   }
   const query = loaderUtils.parseQuery(this.query);
+  //配置bisheng-plugin-react时候的查询字符串，如'bisheng-plugin-react?lang=__react'
   const lang = query.lang || 'react-example';
+  //获取语言
   const res = transformer(content, lang);
+  //转化为特定语言的内容
   const inputAst = res.inputAst;
+  //code中代码进行了特殊的处理
   const imports = res.imports;
+  //得到code中所有的import部分
   for (let k = 0; k < imports.length; k++) {
     inputAst.program.body.unshift(imports[k]);
   }
+  //在代码的前面插入我们的import内容
   const code = generator(inputAst, null, content).code;
+  //code表示处理后的结果,也就是ast转化为javascript字符串
   const noreact = query.noreact;
   if (noreact) {
     return code;
   }
+  //是否传入了noreact查询字段
   return 'import React from \'react\';\n' +
     'import ReactDOM from \'react-dom\';\n' +
     code;
+    //把ast转化为我们的javascript字符串
 };
 ```
 
-我们看看transformer中的处理的代码：
+其中[babel-generator](https://github.com/babel/babel/tree/master/packages/babel-generator)的使用如下:
+
+```js
+import {parse} from 'babylon';
+import generate from 'babel-generator';
+const code = 'class Example {}';
+const ast = parse(code);
+//babylon先处理code得到ast
+const output = generate(ast, { /* options */ }, code);
+//把ast传入到我们的babel-generator中
+```
+
+我们看看[transformer](https://github.com/liangklfang/babylon)中的处理的代码：
+
 ```js
 'use strict';
-
 const babylon = require('babylon');
 const types = require('babel-types');
 const traverse = require('babel-traverse').default;
-
 function parser(content) {
   return babylon.parse(content, {
-    sourceType: 'module',
-    plugins: [
+    //调用babylon
+    sourceType: 'module',//模块解析的模式，可以是'module'(ES6模式)或者'scripts'
+    plugins: [//启用的插件
       'jsx',
       'flow',
       'asyncFunctions',
@@ -1284,50 +1378,69 @@ function parser(content) {
     ],
   });
 }
+//调用方式为  const res = transformer(content, lang);
 module.exports = function transformer(content, lang) {
   let imports = [];
   const inputAst = parser(content);
+  //转化ast(抽象语法树)结果
   traverse(inputAst, {
+    //对数组进行处理
     ArrayExpression: function(path) {
       const node = path.node;
+      //获取node
       const firstItem = node.elements[0];
       const secondItem = node.elements[1];
+      //获取数组的前两个参数
       let renderReturn;
       if (firstItem &&
         firstItem.type === 'StringLiteral' &&
         firstItem.value === 'pre' &&
         secondItem.properties[0].value.value === lang) {
+        //第一个元素的type是string，而且value是'pre'，而且语言必须是相同的
         let codeNode = node.elements[2].elements[1];
+        //此时得到的我们的Literal对象
         let code = codeNode.value;
+        //获取code标签的值，并且把code标签的内部的内容继续转化为ast格式
         const codeAst = parser(code);
+        //处理我们的code内容得到ast
         traverse(codeAst, {
           ImportDeclaration: function(importPath) {
             imports.push(importPath.node);
+            //获取code中的import节点，这里的node表示的就是这个解析成的ast对象
             importPath.remove();
           },
           CallExpression: function(CallPath) {
+            //处理code标签中的函数调用
             const CallPathNode = CallPath.node;
+            //获取节点本身
             if (CallPathNode.callee &&
               CallPathNode.callee.object &&
               CallPathNode.callee.object.name === 'ReactDOM' &&
               CallPathNode.callee.property &&
               CallPathNode.callee.property.name === 'render') {
-
+              //其中函数的调用者是callee.object.name获取调用者的名称
+              //callee.propery.name获取被调用的方法的名称
               renderReturn = types.returnStatement(
                 CallPathNode.arguments[0]
               );
+              //自己构造一个returnStatement实例,这里的CallPathNode.arguments[0]相当于window.alert(123);中的参数值。所以renderReturn就是我们调用ReactDOM.render时候传入的参数本身，即ReactDOM.render(<ButtonSize />, mountNode);这里就是renderReturn=<ButtonSize />即实例化的对象
               CallPath.remove();
             }
           },
         });
         const astProgramBody = codeAst.program.body;
+        //获取code解析出来的ast内容部分
         const codeBlock = types.BlockStatement(astProgramBody);
+        //构建了一个BlockStatement，也就是使用{}括号括起来的一个object对象
         // ReactDOM.render always at the last of preview method
         if (renderReturn) {
           astProgramBody.push(renderReturn);
         }
+        //如果render方法传入了参数，那么我们在程序后面加上astProgramBody,也就是render参数值
+        //t.functionExpression(id, params, body, generator, async)
         const coceFunction = types.functionExpression(
           types.Identifier('jsonmlReactLoader'),
+          //这个函数名称是jsonmlReactLoader
           [],
           codeBlock
         );
@@ -1336,17 +1449,522 @@ module.exports = function transformer(content, lang) {
     },
   });
   return {
-    imports: imports,
-    inputAst: inputAst,
+    imports: imports,//在code标签中所有的import代码部分
+    inputAst: inputAst,//转化后的结果，对于pre标签下的code标签的内容进行了特殊的转化
   };
 };
 ```
 
+其中这里的处理我有自己的一点理解：我们renderReturn实际上相当于一个实例化后的对象，同时把这个对象放在了astProgramBody的最后面，*表示我们在页面中的真实的效果展示部分，而不是源码部分，即preview部分*。
+
+其中returnStatement如下：
+![](./return.png)
+
+blockStatement就相当于if(){}中的`{}括号和括号里面的内容部分`：
+![](./block.png)
+
+总之，bisheng-plugin-react就是在我们的loader中添加jsonml-react-loader用于处理markdown文件。[bisheng-plugin-react](https://github.com/benjycui/bisheng-plugin-react)。[babylon](https://www.npmjs.com/package/@divmain/babylon)。我们分析下其中node中的内容：
+
+callee如下：
+```json
+      "callee": {//表示的是函数
+          "type": "MemberExpression",
+          "start": 138,
+          "end": 152,
+          "object": {
+            "type": "MemberExpression",
+            "start": 138,
+            "end": 146,
+            "object": {
+              "type": "Identifier",
+              "start": 138,
+              "end": 142,
+              "name": "Math"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 143,
+              "end": 146,
+              "name": "min"
+            },
+            "computed": false
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 147,
+            "end": 152,
+            "name": "apply"
+          },
+          "computed": false
+        }
+```
+
+elements如下结构:
+```js
+ Math.min.apply([
+        "pre",
+        {
+          "lang": "jsx",
+          "highlighted": "<span class=\"token keyword\">import</span></span>"
+        },
+       ['code',"import * from antd"]
+      ]);
+```
+
+因为这个是jsonML，第二个对象是pre标签的属性，第三个元素是子元素的内容(*注意，在jsonML中每一个标签都是一个数组，数组中第一个元素表示标签名，第二个表示属性，第三个表示子元素*)。
+
+callPath.node如下结构：
+![](./call.png)
+
+callee.object如下结果(此时必须是MemberExpression,而我们的ReactDOM.render就是MemberExpression类型)：
+![](./member.png)
+
+关于path.replaceWidth:
+```js
+var babel = require('babel-core');
+var t = require('babel-types');
+const code = `abs(-8);`;
+const visitor = {
+  CallExpression(path) {
+    if (path.node.callee.name !== 'abs') return;
+    path.replaceWith(t.CallExpression(
+      t.MemberExpression(t.identifier('Math'), t.identifier('abs')),
+      path.node.arguments
+    ));
+  }
+};
+const result = babel.transform(code, {
+  plugins: [{
+    visitor: visitor
+  }]
+});
+// Math.abs(-8)
+console.log(result.code);
+```
+
+我们给出一个使用babylon解析的例子:
+```js
+var babylon=require("babylon");
+const code = 'class Example {constructor(){}}';
+const fs = require('fs');
+console.log('babylon',JSON.stringify(babylon.parse(code)));
+```
+
+其中解析得到的结果如下：
+```json
+ {
+    "type": "File", 
+    "start": 0, 
+    "end": 31, 
+    "loc": {
+        "start": {
+            "line": 1, 
+            "column": 0
+        }, 
+        "end": {
+            "line": 1, 
+            "column": 31
+        }
+    }, 
+    //获取parse后的codeAst.program.body;
+    "program": {
+        "type": "Program", 
+        "start": 0, 
+        "end": 31, 
+        "loc": {
+            "start": {
+                "line": 1, 
+                "column": 0
+            }, 
+            "end": {
+                "line": 1, 
+                "column": 31
+            }
+        }, 
+        "sourceType": "script", 
+        "body": [
+            {
+                "type": "ClassDeclaration", 
+                "start": 0, 
+                "end": 31, 
+                "loc": {
+                    "start": {
+                        "line": 1, 
+                        "column": 0
+                    }, 
+                    "end": {
+                        "line": 1, 
+                        "column": 31
+                    }
+                }, 
+                //id部分
+                "id": {
+                    "type": "Identifier", 
+                    "start": 6, 
+                    "end": 13, 
+                    "loc": {
+                        "start": {
+                            "line": 1, 
+                            "column": 6
+                        }, 
+                        "end": {
+                            "line": 1, 
+                            "column": 13
+                        }, 
+                        "identifierName": "Example"
+                    }, 
+                    "name": "Example"
+                }, 
+                "superClass": null, 
+                //classBody
+                "body": {
+                    "type": "ClassBody", 
+                    "start": 14, 
+                    "end": 31, 
+                    "loc": {
+                        "start": {
+                            "line": 1, 
+                            "column": 14
+                        }, 
+                        "end": {
+                            "line": 1, 
+                            "column": 31
+                        }
+                    }, 
+                    "body": [
+                        {
+                            "type": "ClassMethod", 
+                            "start": 15, 
+                            "end": 30, 
+                            "loc": {
+                                "start": {
+                                    "line": 1, 
+                                    "column": 15
+                                }, 
+                                "end": {
+                                    "line": 1, 
+                                    "column": 30
+                                }
+                            }, 
+                            "computed": false, 
+                            "key": {
+                                "type": "Identifier", 
+                                "start": 15, 
+                                "end": 26, 
+                                "loc": {
+                                    "start": {
+                                        "line": 1, 
+                                        "column": 15
+                                    }, 
+                                    "end": {
+                                        "line": 1, 
+                                        "column": 26
+                                    }, 
+                                    "identifierName": "constructor"
+                                }, 
+                                "name": "constructor"
+                            }, 
+                            "static": false, 
+                            "kind": "constructor", 
+                            "id": null, 
+                            "generator": false, 
+                            "expression": false, 
+                            "async": false, 
+                            "params": [ ], 
+                            "body": {
+                                "type": "BlockStatement", 
+                                "start": 28, 
+                                "end": 30, 
+                                "loc": {
+                                    "start": {
+                                        "line": 1, 
+                                        "column": 28
+                                    }, 
+                                    "end": {
+                                        "line": 1, 
+                                        "column": 30
+                                    }
+                                }, 
+                                "body": [ ], 
+                                "directives": [ ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ], 
+        "directives": [ ]
+    }, 
+    "comments": [ ], 
+    //comments和tokens两个部分
+    "tokens": [
+        {
+            "type": {
+                "label": "class", 
+                "keyword": "class", 
+                "beforeExpr": false, 
+                "startsExpr": false, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null, 
+                "updateContext": null
+            }, 
+            "value": "class", 
+            "start": 0, 
+            "end": 5, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 0
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 5
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "name", 
+                "beforeExpr": false, 
+                "startsExpr": true, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "value": "Example", 
+            "start": 6, 
+            "end": 13, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 6
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 13
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "{", 
+                "beforeExpr": true, 
+                "startsExpr": true, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 14, 
+            "end": 15, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 14
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 15
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "name", 
+                "beforeExpr": false, 
+                "startsExpr": true, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "value": "constructor", 
+            "start": 15, 
+            "end": 26, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 15
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 26
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "(", 
+                "beforeExpr": true, 
+                "startsExpr": true, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 26, 
+            "end": 27, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 26
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 27
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": ")", 
+                "beforeExpr": false, 
+                "startsExpr": false, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 27, 
+            "end": 28, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 27
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 28
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "{", 
+                "beforeExpr": true, 
+                "startsExpr": true, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 28, 
+            "end": 29, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 28
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 29
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "}", 
+                "beforeExpr": false, 
+                "startsExpr": false, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 29, 
+            "end": 30, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 29
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 30
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "}", 
+                "beforeExpr": false, 
+                "startsExpr": false, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null
+            }, 
+            "start": 30, 
+            "end": 31, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 30
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 31
+                }
+            }
+        }, 
+        {
+            "type": {
+                "label": "eof", 
+                "beforeExpr": false, 
+                "startsExpr": false, 
+                "rightAssociative": false, 
+                "isLoop": false, 
+                "isAssign": false, 
+                "prefix": false, 
+                "postfix": false, 
+                "binop": null, 
+                "updateContext": null
+            }, 
+            "start": 31, 
+            "end": 31, 
+            "loc": {
+                "start": {
+                    "line": 1, 
+                    "column": 31
+                }, 
+                "end": {
+                    "line": 1, 
+                    "column": 31
+                }
+            }
+        }
+    ]
+}
+```
+
+其中codeAst=babylon.parse后得到的结果，总之经过解析后得到的对象含有:type,start,end,loc,program,comments和tokens等几个部分,其中https://astexplorer.net/#/tSIO7NIclp/2解析出来的就是我们的program.body部分，也就是如下的内容：
+![babylon.parse的结果](./method.png)
 
 
+参考资料：
 
-
-
+![理解 Babel 插件](http://taobaofed.org/blog/2016/09/29/babel-plugins/)
 
 
 

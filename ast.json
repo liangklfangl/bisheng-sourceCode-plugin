@@ -1,0 +1,180 @@
+{
+  "type": "Program",
+  "start": 0,
+  "end": 164,
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "start": 0,
+      "end": 136,
+      "id": {
+        "type": "Identifier",
+        "start": 9,
+        "end": 12,
+        "name": "abs"
+      },
+      "generator": false,
+      "expression": false,
+      "params": [
+        {
+          "type": "Identifier",
+          "start": 13,
+          "end": 19,
+          "name": "number"
+        }
+      ],
+      "body": {
+        "type": "BlockStatement",
+        "start": 21,
+        "end": 136,
+        "body": [
+          {
+            "type": "IfStatement",
+            "start": 25,
+            "end": 134,
+            "test": {
+              "type": "BinaryExpression",
+              "start": 29,
+              "end": 40,
+              "left": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 35,
+                "name": "number"
+              },
+              "operator": ">=",
+              "right": {
+                "type": "Literal",
+                "start": 39,
+                "end": 40,
+                "value": 0,
+                "raw": "0"
+              }
+            },
+            "consequent": {
+              "type": "BlockStatement",
+              "start": 42,
+              "end": 90,
+              "body": [
+                {
+                  "type": "ReturnStatement",
+                  "start": 57,
+                  "end": 71,
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 64,
+                    "end": 70,
+                    "name": "number"
+                  }
+                }
+              ]
+            },
+            "alternate": {
+              "type": "BlockStatement",
+              "start": 96,
+              "end": 134,
+              "body": [
+                {
+                  "type": "ReturnStatement",
+                  "start": 102,
+                  "end": 117,
+                  "argument": {
+                    "type": "UnaryExpression",
+                    "start": 109,
+                    "end": 116,
+                    "operator": "-",
+                    "prefix": true,
+                    "argument": {
+                      "type": "Identifier",
+                      "start": 110,
+                      "end": 116,
+                      "name": "number"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "start": 138,
+      "end": 164,
+      "expression": {
+        "type": "CallExpression",
+        "start": 138,
+        "end": 163,
+        "callee": {
+          "type": "MemberExpression",
+          "start": 138,
+          "end": 152,
+          "object": {
+            "type": "MemberExpression",
+            "start": 138,
+            "end": 146,
+            "object": {
+              "type": "Identifier",
+              "start": 138,
+              "end": 142,
+              "name": "Math"
+            },
+            "property": {
+              "type": "Identifier",
+              "start": 143,
+              "end": 146,
+              "name": "min"
+            },
+            "computed": false
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 147,
+            "end": 152,
+            "name": "apply"
+          },
+          "computed": false
+        },
+        "arguments": [
+          {
+            "type": "ArrayExpression",
+            "start": 153,
+            "end": 162,
+            "elements": [
+              {
+                "type": "Literal",
+                "start": 154,
+                "end": 155,
+                "value": 1,
+                "raw": "1"
+              },
+              {
+                "type": "Literal",
+                "start": 156,
+                "end": 157,
+                "value": 2,
+                "raw": "2"
+              },
+              {
+                "type": "Literal",
+                "start": 158,
+                "end": 159,
+                "value": 4,
+                "raw": "4"
+              },
+              {
+                "type": "Literal",
+                "start": 160,
+                "end": 161,
+                "value": 2,
+                "raw": "2"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "sourceType": "module"
+}
