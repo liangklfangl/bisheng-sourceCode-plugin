@@ -1,0 +1,7 @@
+module.exports = {
+    'arrow-point-at-center': require('/Users/qingtian/Desktop/sy-standard-project/components/popover/demo/arrow-point-at-center.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/popover/demo/basic.md'),
+    'control': require('/Users/qingtian/Desktop/sy-standard-project/components/popover/demo/control.md'),
+    'placement': require('/Users/qingtian/Desktop/sy-standard-project/components/popover/demo/placement.md'),
+    'triggerType': require('/Users/qingtian/Desktop/sy-standard-project/components/popover/demo/triggerType.md'),
+}

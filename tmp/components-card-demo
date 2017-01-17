@@ -1,0 +1,8 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/basic.md'),
+    'border-less': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/border-less.md'),
+    'grid': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/grid.md'),
+    'loading': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/loading.md'),
+    'no-padding': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/no-padding.md'),
+    'simple': require('/Users/qingtian/Desktop/sy-standard-project/components/card/demo/simple.md'),
+}

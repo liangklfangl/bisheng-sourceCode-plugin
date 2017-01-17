@@ -1,0 +1,7 @@
+module.exports = {
+    'advanced': require('/Users/qingtian/Desktop/sy-standard-project/components/transfer/demo/advanced.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/transfer/demo/basic.md'),
+    'custom-item': require('/Users/qingtian/Desktop/sy-standard-project/components/transfer/demo/custom-item.md'),
+    'large-data': require('/Users/qingtian/Desktop/sy-standard-project/components/transfer/demo/large-data.md'),
+    'search': require('/Users/qingtian/Desktop/sy-standard-project/components/transfer/demo/search.md'),
+}

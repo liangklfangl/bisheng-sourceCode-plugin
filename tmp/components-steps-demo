@@ -1,0 +1,9 @@
+module.exports = {
+    'error': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/error.md'),
+    'icon': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/icon.md'),
+    'simple': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/simple.md'),
+    'small-size': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/small-size.md'),
+    'step-next': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/step-next.md'),
+    'vertical-small': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/vertical-small.md'),
+    'vertical': require('/Users/qingtian/Desktop/sy-standard-project/components/steps/demo/vertical.md'),
+}

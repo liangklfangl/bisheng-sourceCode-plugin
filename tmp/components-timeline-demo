@@ -1,0 +1,6 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/timeline/demo/basic.md'),
+    'color': require('/Users/qingtian/Desktop/sy-standard-project/components/timeline/demo/color.md'),
+    'custom': require('/Users/qingtian/Desktop/sy-standard-project/components/timeline/demo/custom.md'),
+    'pending': require('/Users/qingtian/Desktop/sy-standard-project/components/timeline/demo/pending.md'),
+}

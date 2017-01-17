@@ -1,0 +1,6 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/popconfirm/demo/basic.md'),
+    'dynamic-trigger': require('/Users/qingtian/Desktop/sy-standard-project/components/popconfirm/demo/dynamic-trigger.md'),
+    'locale': require('/Users/qingtian/Desktop/sy-standard-project/components/popconfirm/demo/locale.md'),
+    'placement': require('/Users/qingtian/Desktop/sy-standard-project/components/popconfirm/demo/placement.md'),
+}

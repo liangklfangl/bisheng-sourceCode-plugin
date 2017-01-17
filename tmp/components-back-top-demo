@@ -1,0 +1,4 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/back-top/demo/basic.md'),
+    'custom': require('/Users/qingtian/Desktop/sy-standard-project/components/back-top/demo/custom.md'),
+}

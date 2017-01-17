@@ -1,0 +1,7 @@
+module.exports = {
+    'aside-collapse': require('/Users/qingtian/Desktop/sy-standard-project/docs/spec/layout/demo/aside-collapse.md'),
+    'aside': require('/Users/qingtian/Desktop/sy-standard-project/docs/spec/layout/demo/aside.md'),
+    'ceiling': require('/Users/qingtian/Desktop/sy-standard-project/docs/spec/layout/demo/ceiling.md'),
+    'top-aside': require('/Users/qingtian/Desktop/sy-standard-project/docs/spec/layout/demo/top-aside.md'),
+    'top': require('/Users/qingtian/Desktop/sy-standard-project/docs/spec/layout/demo/top.md'),
+}

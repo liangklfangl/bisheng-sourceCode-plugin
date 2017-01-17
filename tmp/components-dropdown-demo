@@ -1,0 +1,9 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/basic.md'),
+    'dropdown-button': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/dropdown-button.md'),
+    'event': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/event.md'),
+    'item': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/item.md'),
+    'overlay-visible': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/overlay-visible.md'),
+    'sub-menu': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/sub-menu.md'),
+    'trigger': require('/Users/qingtian/Desktop/sy-standard-project/components/dropdown/demo/trigger.md'),
+}

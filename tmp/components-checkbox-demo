@@ -1,0 +1,7 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/checkbox/demo/basic.md'),
+    'check-all': require('/Users/qingtian/Desktop/sy-standard-project/components/checkbox/demo/check-all.md'),
+    'controller': require('/Users/qingtian/Desktop/sy-standard-project/components/checkbox/demo/controller.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/checkbox/demo/disabled.md'),
+    'group': require('/Users/qingtian/Desktop/sy-standard-project/components/checkbox/demo/group.md'),
+}

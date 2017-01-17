@@ -1,0 +1,9 @@
+module.exports = {
+    'banner': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/banner.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/basic.md'),
+    'closable': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/closable.md'),
+    'close-text': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/close-text.md'),
+    'description': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/description.md'),
+    'icon': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/icon.md'),
+    'style': require('/Users/qingtian/Desktop/sy-standard-project/components/alert/demo/style.md'),
+}

@@ -1,0 +1,9 @@
+module.exports = {
+    'addon': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/addon.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/basic.md'),
+    'disable-options': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/disable-options.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/disabled.md'),
+    'hide-column': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/hide-column.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/size.md'),
+    'value': require('/Users/qingtian/Desktop/sy-standard-project/components/time-picker/demo/value.md'),
+}

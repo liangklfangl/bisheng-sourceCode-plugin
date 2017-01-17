@@ -1,0 +1,7 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/tag/demo/basic.md'),
+    'checkable': require('/Users/qingtian/Desktop/sy-standard-project/components/tag/demo/checkable.md'),
+    'colorful': require('/Users/qingtian/Desktop/sy-standard-project/components/tag/demo/colorful.md'),
+    'control': require('/Users/qingtian/Desktop/sy-standard-project/components/tag/demo/control.md'),
+    'hot-tags': require('/Users/qingtian/Desktop/sy-standard-project/components/tag/demo/hot-tags.md'),
+}

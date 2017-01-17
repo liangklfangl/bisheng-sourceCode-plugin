@@ -1,0 +1,8 @@
+module.exports = {
+    'horizontal': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/horizontal.md'),
+    'sider-current': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/sider-current.md'),
+    'sider': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/sider.md'),
+    'switch-mode': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/switch-mode.md'),
+    'theme': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/theme.md'),
+    'vertical': require('/Users/qingtian/Desktop/sy-standard-project/components/menu/demo/vertical.md'),
+}

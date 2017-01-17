@@ -1,0 +1,10 @@
+module.exports = {
+    '99plus': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/99plus.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/basic.md'),
+    'change': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/change.md'),
+    'dot': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/dot.md'),
+    'link': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/link.md'),
+    'no-wrapper': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/no-wrapper.md'),
+    'overflow': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/overflow.md'),
+    'status': require('/Users/qingtian/Desktop/sy-standard-project/components/badge/demo/status.md'),
+}

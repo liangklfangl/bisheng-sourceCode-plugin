@@ -1,0 +1,4 @@
+module.exports = {
+    'all': require('/Users/qingtian/Desktop/sy-standard-project/components/locale-provider/demo/all.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/locale-provider/demo/basic.md'),
+}

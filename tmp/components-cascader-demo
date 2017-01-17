@@ -1,0 +1,11 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/basic.md'),
+    'change-on-select': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/change-on-select.md'),
+    'custom-render': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/custom-render.md'),
+    'custom-trigger': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/custom-trigger.md'),
+    'default-value': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/default-value.md'),
+    'disabled-option': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/disabled-option.md'),
+    'hover': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/hover.md'),
+    'search': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/search.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/cascader/demo/size.md'),
+}

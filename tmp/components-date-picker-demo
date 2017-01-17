@@ -1,0 +1,11 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/basic.md'),
+    'disabled-date': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/disabled-date.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/disabled.md'),
+    'format': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/format.md'),
+    'locale': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/locale.md'),
+    'presetted-ranges': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/presetted-ranges.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/size.md'),
+    'start-end': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/start-end.md'),
+    'time': require('/Users/qingtian/Desktop/sy-standard-project/components/date-picker/demo/time.md'),
+}

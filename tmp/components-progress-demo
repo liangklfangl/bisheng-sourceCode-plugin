@@ -1,0 +1,9 @@
+module.exports = {
+    'circle-dynamic': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/circle-dynamic.md'),
+    'circle-mini': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/circle-mini.md'),
+    'circle': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/circle.md'),
+    'dynamic': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/dynamic.md'),
+    'format': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/format.md'),
+    'line-mini': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/line-mini.md'),
+    'line': require('/Users/qingtian/Desktop/sy-standard-project/components/progress/demo/line.md'),
+}

@@ -1,0 +1,7 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/calendar/demo/basic.md'),
+    'card': require('/Users/qingtian/Desktop/sy-standard-project/components/calendar/demo/card.md'),
+    'custom-render': require('/Users/qingtian/Desktop/sy-standard-project/components/calendar/demo/custom-render.md'),
+    'locale': require('/Users/qingtian/Desktop/sy-standard-project/components/calendar/demo/locale.md'),
+    'notice-calendar': require('/Users/qingtian/Desktop/sy-standard-project/components/calendar/demo/notice-calendar.md'),
+}

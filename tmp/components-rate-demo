@@ -1,0 +1,6 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/rate/demo/basic.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/rate/demo/disabled.md'),
+    'half': require('/Users/qingtian/Desktop/sy-standard-project/components/rate/demo/half.md'),
+    'text': require('/Users/qingtian/Desktop/sy-standard-project/components/rate/demo/text.md'),
+}

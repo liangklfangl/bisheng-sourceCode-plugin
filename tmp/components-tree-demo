@@ -1,0 +1,7 @@
+module.exports = {
+    'basic-controlled': require('/Users/qingtian/Desktop/sy-standard-project/components/tree/demo/basic-controlled.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/tree/demo/basic.md'),
+    'draggable': require('/Users/qingtian/Desktop/sy-standard-project/components/tree/demo/draggable.md'),
+    'dynamic': require('/Users/qingtian/Desktop/sy-standard-project/components/tree/demo/dynamic.md'),
+    'search': require('/Users/qingtian/Desktop/sy-standard-project/components/tree/demo/search.md'),
+}

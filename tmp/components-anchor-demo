@@ -1,0 +1,4 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/anchor/demo/basic.md'),
+    'fixed': require('/Users/qingtian/Desktop/sy-standard-project/components/anchor/demo/fixed.md'),
+}

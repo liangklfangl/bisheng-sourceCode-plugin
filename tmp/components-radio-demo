@@ -1,0 +1,8 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/basic.md'),
+    'disable': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/disable.md'),
+    'radiobutton': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/radiobutton.md'),
+    'radiogroup-more': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/radiogroup-more.md'),
+    'radiogroup': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/radiogroup.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/radio/demo/size.md'),
+}

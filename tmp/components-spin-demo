@@ -1,0 +1,7 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/spin/demo/basic.md'),
+    'inside': require('/Users/qingtian/Desktop/sy-standard-project/components/spin/demo/inside.md'),
+    'nested': require('/Users/qingtian/Desktop/sy-standard-project/components/spin/demo/nested.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/spin/demo/size.md'),
+    'tip': require('/Users/qingtian/Desktop/sy-standard-project/components/spin/demo/tip.md'),
+}

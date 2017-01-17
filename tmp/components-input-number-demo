@@ -1,0 +1,6 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/input-number/demo/basic.md'),
+    'digit': require('/Users/qingtian/Desktop/sy-standard-project/components/input-number/demo/digit.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/input-number/demo/disabled.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/input-number/demo/size.md'),
+}

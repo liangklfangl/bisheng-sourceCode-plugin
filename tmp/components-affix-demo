@@ -1,0 +1,5 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/affix/demo/basic.md'),
+    'on-change': require('/Users/qingtian/Desktop/sy-standard-project/components/affix/demo/on-change.md'),
+    'target': require('/Users/qingtian/Desktop/sy-standard-project/components/affix/demo/target.md'),
+}

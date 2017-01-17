@@ -1,0 +1,8 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/basic.md'),
+    'event': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/event.md'),
+    'icon-slider': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/icon-slider.md'),
+    'input-number': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/input-number.md'),
+    'mark': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/mark.md'),
+    'tip-formatter': require('/Users/qingtian/Desktop/sy-standard-project/components/slider/demo/tip-formatter.md'),
+}

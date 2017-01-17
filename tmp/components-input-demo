@@ -1,0 +1,10 @@
+module.exports = {
+    'addon': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/addon.md'),
+    'autosize-textarea': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/autosize-textarea.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/basic.md'),
+    'group': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/group.md'),
+    'search-input': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/search-input.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/size.md'),
+    'textarea': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/textarea.md'),
+    'tooltip': require('/Users/qingtian/Desktop/sy-standard-project/components/input/demo/tooltip.md'),
+}

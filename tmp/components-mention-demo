@@ -1,0 +1,10 @@
+module.exports = {
+    'async': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/async.md'),
+    'avatar': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/avatar.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/basic.md'),
+    'controllder-simple': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/controllder-simple.md'),
+    'controlled': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/controlled.md'),
+    'custom-tag': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/custom-tag.md'),
+    'multilines': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/multilines.md'),
+    'popupContainer': require('/Users/qingtian/Desktop/sy-standard-project/components/mention/demo/popupContainer.md'),
+}

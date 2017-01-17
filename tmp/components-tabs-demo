@@ -1,0 +1,13 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/basic.md'),
+    'card-top': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/card-top.md'),
+    'card': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/card.md'),
+    'custom-add-trigger': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/custom-add-trigger.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/disabled.md'),
+    'editable-card': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/editable-card.md'),
+    'extra': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/extra.md'),
+    'icon': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/icon.md'),
+    'position': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/position.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/size.md'),
+    'slide': require('/Users/qingtian/Desktop/sy-standard-project/components/tabs/demo/slide.md'),
+}

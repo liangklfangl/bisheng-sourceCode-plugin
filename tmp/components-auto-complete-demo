@@ -1,0 +1,4 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/auto-complete/demo/basic.md'),
+    'options': require('/Users/qingtian/Desktop/sy-standard-project/components/auto-complete/demo/options.md'),
+}

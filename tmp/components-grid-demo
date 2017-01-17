@@ -1,0 +1,11 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/basic.md'),
+    'flex-align': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/flex-align.md'),
+    'flex-order': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/flex-order.md'),
+    'flex': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/flex.md'),
+    'gutter': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/gutter.md'),
+    'offset': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/offset.md'),
+    'reponsive-more': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/reponsive-more.md'),
+    'reponsive': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/reponsive.md'),
+    'sort': require('/Users/qingtian/Desktop/sy-standard-project/components/grid/demo/sort.md'),
+}

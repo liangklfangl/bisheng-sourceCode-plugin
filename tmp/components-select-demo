@@ -1,0 +1,13 @@
+module.exports = {
+    'automatic-tokenization': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/automatic-tokenization.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/basic.md'),
+    'combobox': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/combobox.md'),
+    'coordinate': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/coordinate.md'),
+    'label-in-value': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/label-in-value.md'),
+    'multiple': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/multiple.md'),
+    'optgroup': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/optgroup.md'),
+    'search-box': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/search-box.md'),
+    'search': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/search.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/size.md'),
+    'tags': require('/Users/qingtian/Desktop/sy-standard-project/components/select/demo/tags.md'),
+}

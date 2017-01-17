@@ -1,0 +1,10 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/basic.md'),
+    'changer': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/changer.md'),
+    'controlled': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/controlled.md'),
+    'jump': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/jump.md'),
+    'mini': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/mini.md'),
+    'more': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/more.md'),
+    'simple': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/simple.md'),
+    'total': require('/Users/qingtian/Desktop/sy-standard-project/components/pagination/demo/total.md'),
+}

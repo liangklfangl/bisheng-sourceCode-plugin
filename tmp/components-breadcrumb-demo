@@ -1,0 +1,6 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/breadcrumb/demo/basic.md'),
+    'router': require('/Users/qingtian/Desktop/sy-standard-project/components/breadcrumb/demo/router.md'),
+    'separator': require('/Users/qingtian/Desktop/sy-standard-project/components/breadcrumb/demo/separator.md'),
+    'withIcon': require('/Users/qingtian/Desktop/sy-standard-project/components/breadcrumb/demo/withIcon.md'),
+}

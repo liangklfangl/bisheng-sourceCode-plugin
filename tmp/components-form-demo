@@ -1,0 +1,15 @@
+module.exports = {
+    'advanced-search': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/advanced-search.md'),
+    'coordinated': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/coordinated.md'),
+    'customized-form-controls': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/customized-form-controls.md'),
+    'dynamic-form-item': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/dynamic-form-item.md'),
+    'form-in-modal': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/form-in-modal.md'),
+    'global-state': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/global-state.md'),
+    'horizontal-login': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/horizontal-login.md'),
+    'normal-login': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/normal-login.md'),
+    'register': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/register.md'),
+    'time-related-controls': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/time-related-controls.md'),
+    'validate-other': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/validate-other.md'),
+    'validate-static': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/validate-static.md'),
+    'without-form-create': require('/Users/qingtian/Desktop/sy-standard-project/components/form/demo/without-form-create.md'),
+}

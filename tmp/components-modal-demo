@@ -1,0 +1,11 @@
+module.exports = {
+    'async': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/async.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/basic.md'),
+    'confirm-promise': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/confirm-promise.md'),
+    'confirm': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/confirm.md'),
+    'footer': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/footer.md'),
+    'info': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/info.md'),
+    'locale': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/locale.md'),
+    'manual': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/manual.md'),
+    'position': require('/Users/qingtian/Desktop/sy-standard-project/components/modal/demo/position.md'),
+}

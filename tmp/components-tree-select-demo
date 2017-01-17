@@ -1,0 +1,5 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/tree-select/demo/basic.md'),
+    'checkable': require('/Users/qingtian/Desktop/sy-standard-project/components/tree-select/demo/checkable.md'),
+    'treeData': require('/Users/qingtian/Desktop/sy-standard-project/components/tree-select/demo/treeData.md'),
+}

@@ -1,0 +1,5 @@
+module.exports = {
+    'arrow-point-at-center': require('/Users/qingtian/Desktop/sy-standard-project/components/tooltip/demo/arrow-point-at-center.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/tooltip/demo/basic.md'),
+    'placement': require('/Users/qingtian/Desktop/sy-standard-project/components/tooltip/demo/placement.md'),
+}

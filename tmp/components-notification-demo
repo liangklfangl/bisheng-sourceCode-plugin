@@ -1,0 +1,7 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/notification/demo/basic.md'),
+    'custom-icon': require('/Users/qingtian/Desktop/sy-standard-project/components/notification/demo/custom-icon.md'),
+    'duration': require('/Users/qingtian/Desktop/sy-standard-project/components/notification/demo/duration.md'),
+    'with-btn': require('/Users/qingtian/Desktop/sy-standard-project/components/notification/demo/with-btn.md'),
+    'with-icon': require('/Users/qingtian/Desktop/sy-standard-project/components/notification/demo/with-icon.md'),
+}

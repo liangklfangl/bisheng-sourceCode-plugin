@@ -1,0 +1,9 @@
+module.exports = {
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/basic.md'),
+    'button-group': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/button-group.md'),
+    'disabled': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/disabled.md'),
+    'icon': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/icon.md'),
+    'loading': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/loading.md'),
+    'multiple': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/multiple.md'),
+    'size': require('/Users/qingtian/Desktop/sy-standard-project/components/button/demo/size.md'),
+}
