@@ -2010,6 +2010,27 @@ function filesToTreeStructure(files) {
   }
 ```
 
+所以在遍历的时候，nodePath是一个递归的文件查找路径:
+```js
+/components/alert
+/components/alert/demo
+/components/alert/index
+/components/alert/index/en-US
+/components/alert/index/zh-CN
+```
+
+对应的nodeValue是如下内容：
+```js
+  nodevalue=[object Object]
+  nodevalue=[object Object]
+  nodevalue=[object Object]
+  nodevalue=components/alert/index.en-US.md
+  nodevalue=components/alert/index.zh-CN.md
+```
+
+根据文件树对象，上面的nodePath和nodeValue应该是比较容易理解的！
+
+
 
 参考资料：
 
