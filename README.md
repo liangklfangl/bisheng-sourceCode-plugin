@@ -2031,6 +2031,20 @@ function filesToTreeStructure(files) {
 根据文件树对象，上面的nodePath和nodeValue应该是比较容易理解的！
 
 
+### 3.bisheng将每一个组件的用法全部放置在bisheng/tmp目录下
+```js
+module.exports = {
+    'avatar': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/avatar.md'),
+    'basic': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/basic.md'),
+    'defaultFileList': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/defaultFileList.md'),
+    'drag': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/drag.md'),
+    'fileList': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/fileList.md'),
+    'picture-card': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/picture-card.md'),
+    'picture-style': require('/Users/qingtian/Desktop/sy-standard-project/components/upload/demo/picture-style.md'),
+}
+```
+
+这就是我们每一个组件的所有的用法组件的一个模块。
 
 参考资料：
 
