@@ -119,8 +119,9 @@ function filesToTreeStructure(files) {
   (1)调用方式如下：
     stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)
   (2)R.toPairs使用如下：
-    R.toPairs({a: 1, b: 2, c: 3}); //=> [['a', 1], ['b', 2], ['c', 3]]
+   R.toPairs({a: {loc:{school:'dalian',home:'yuanlin'}}, b: 2, c: 3}); //=> [["a", {"loc": {"home": "yuanlin", "school": "dalian"}}], ["b", 2], ["c", 3]]
 
+作用：把文件树下的所有的文件进行stringify化，并返回给我们的bisheng-data-loader
 */
 function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
   const indent = '  '.repeat(depth);

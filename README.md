@@ -1314,7 +1314,7 @@ module.exports = function jsonmlReactLoader(content) {
   const lang = query.lang || 'react-example';
   //获取语言
   const res = transformer(content, lang);
-  //转化为特定语言的内容
+  //转化为特定语言的内容,去除了pre>code下的import和实例化组件代码
   const inputAst = res.inputAst;
   //code中代码进行了特殊的处理
   const imports = res.imports;
@@ -1429,7 +1429,7 @@ module.exports = function transformer(content, lang) {
           },
         });
         const astProgramBody = codeAst.program.body;
-        //获取code解析出来的ast内容部分
+        //获取code解析出来的ast内容部分，不过我们的import已经被移除，同时render方法的第一个参数已经被保存起来，其是一个returnStatement，相当于return <ButtonSize/>,而且我们的ReactDOM.render这个CallExpression已经被移除了
         const codeBlock = types.BlockStatement(astProgramBody);
         //构建了一个BlockStatement，也就是使用{}括号括起来的一个object对象
         // ReactDOM.render always at the last of preview method
@@ -1450,7 +1450,8 @@ module.exports = function transformer(content, lang) {
   });
   return {
     imports: imports,//在code标签中所有的import代码部分
-    inputAst: inputAst,//转化后的结果，对于pre标签下的code标签的内容进行了特殊的转化
+    inputAst: inputAst,
+    //转化后的结果，对于pre标签下的code标签的内容进行了特殊的转化,移除了import和<ButtonSize/>也就是组件的实例化代码，而把实例化代码放在了body后面作为returnStatement
   };
 };
 ```
@@ -1696,7 +1697,7 @@ console.log('babylon',JSON.stringify(babylon.parse(code)));
         "directives": [ ]
     }, 
     "comments": [ ], 
-    //comments和tokens两个部分
+    //comments和tokens两个部分,tokens是对javascript字符串进行拆分后的结果，comments表示注释
     "tokens": [
         {
             "type": {
@@ -1959,13 +1960,57 @@ console.log('babylon',JSON.stringify(babylon.parse(code)));
 ```
 
 其中codeAst=babylon.parse后得到的结果，总之经过解析后得到的对象含有:type,start,end,loc,program,comments和tokens等几个部分,其中https://astexplorer.net/#/tSIO7NIclp/2解析出来的就是我们的program.body部分，也就是如下的内容：
+
 ![babylon.parse的结果](./method.png)
+
+
+
+### 2.文件树对象
+
+上面说了那多么次文件树对象，我们看看它到底是如何的:
+```js
+{
+ components:
+  {
+    button:{
+        demo:{
+           basic:'/components/button/basic'
+        },
+      index:{
+           en-US:'/components/button/index.en-US.md',
+           zh-CN:'/components/button/index.zh-CN.md'
+        }
+      }
+   },
+  docs:{
+     pattern:{
+       classic:'/docs/pattern/classic.md',
+       form:'/docs/pattern/form.md'
+    }
+  }
+}
+```
+
+其中把文件对象转化为文件树对象是通过如下方式来完成的：
+```js
+const rxSep = new RegExp(`[${path.sep}.]`);
+function filesToTreeStructure(files) {
+  return files.reduce((filesTree, filename) => {
+    const propLens = R.lensPath(filename.replace(/\.md$/i, '').split(rxSep));
+    return R.set(propLens, filename, filesTree);
+  }, {});
+}
+```
+
+通过这里，你就很容易明白下面的这部分内容：
+```js
+ index:{
+     en-US:'/components/button/index.en-US.md',
+     zh-CN:'/components/button/index.zh-CN.md'
+  }
+```
 
 
 参考资料：
 
-![理解 Babel 插件](http://taobaofed.org/blog/2016/09/29/babel-plugins/)
-
-
-
-
+[理解 Babel 插件](http://taobaofed.org/blog/2016/09/29/babel-plugins/)
