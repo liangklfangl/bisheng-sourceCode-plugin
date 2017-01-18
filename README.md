@@ -2343,6 +2343,7 @@ module.exports = function getRoutes(data) {
  //每一个plugin除了有converters，还有我们的utils对象
 
 //传入的template表示组件的路径，如const contentTmpl = './template/Content/index';
+//这个函数其实只做了一件事：通过url查找到实例化的组件，并传入我们的组件的数据(从完整的markdown的jsonml通过pathname查找)！
   function templateWrapper(template, dataPath = '') {
     const Template = require('{{ themePath }}/template' + template.replace(/^\.\/template/, ''));
     //template传入的是组件的路径，如'./template/Content/index'
