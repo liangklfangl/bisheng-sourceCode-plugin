@@ -77,12 +77,6 @@ module.exports = function markdownLoader(content) {
   const query = loaderUtils.parseQuery(this.query);
   const plugins = resolvePlugins(getConfig(query.config).plugins, 'node');
   //获取site/bisheng.cfg.js文件下的plugins插件，经过process处理后返回的plugins是如下的格式：
-  /*
-   [
-      resolvedPlugin,
-      pluginQuery,
-    ]
-  */
   const parsedMarkdown = markdownData.process(filename, content, plugins, query.isBuild);
   //这里得到已经解析后的markdown数据
   return `module.exports = ${stringify(parsedMarkdown)};`;

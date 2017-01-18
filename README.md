@@ -167,11 +167,12 @@ module.exports = function bishengDataLoader(/* content */) {
   }
   const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
   const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  //获取要加载的文件,如/Users/qingtian/Desktop/sy-standard-project/node_modules/bisheng/lib/utils/data.js,因为这个loader就是为了加载这个资源，从loader的配置就可以看出来
   const isSSR = fullPath.endsWith('ssr-data.js');
- 
   const query = loaderUtils.parseQuery(this.query);
+  //解析配置该loader时候的query字段
   const config = getConfig(query.config);
-
+  //获取bisheng.config.js文件
   const markdown = markdownData.generate(config.source);
   //得到所有的source部分的markdown数据
   const browserPlugins = resolvePlugins(config.plugins, 'browser');
@@ -194,7 +195,6 @@ module.exports = function bishengDataLoader(/* content */) {
         if (!picked[key]) {
           picked[key] = [];
         }
-
         const picker = config.pick[key];
         const pickedData = picker(parsedMarkdown);
         //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
@@ -720,13 +720,14 @@ function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
 
 ```js
 module.exports = function markdownLoader(content) {
+  //这里是markdown文件的内容
   if (this.cacheable) {
     //loader缓存
     this.cacheable();
   }
   const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
   const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
-  //这个在上面已经分析过了
+  //这个在上面已经分析过了,得到我们当前的这个loader的request属性，即解析后的路径
   const filename = path.relative(process.cwd(), fullPath);
   //从cwd开始查找我们的这个模块的路径
   const query = loaderUtils.parseQuery(this.query);
@@ -1183,12 +1184,15 @@ module.exports = function resolvePlugins(plugins, moduleName) {
 #### 2.2.3 bisheng-plugin-react
 
 ##### 2.2.3.1 bisheng-plugin-react/lib/browser.js
+
+To convert JSX which is written in Markdown to [React.Element](https://github.com/liangklfang/bisheng-plugin-react)。也就是说通过插件就会把页面中的jsx转化为能够在页面中显示真实效果的js!
+
 源码部分如下：
 ```js
 'use strict';
 var React = require('react');
 module.exports = function() {
-  return {//返回的这个对象会经过JSON.stringify处理后得到字符串
+  return {
     converters: [
       [
         function(node) { return typeof node === 'function'; },
@@ -2122,7 +2126,8 @@ function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
 ```
 
 
-### 4.为webpack配置设置entry为react-router文件
+### 4.为webpack配置entry为react-router文件
+
 ```js
  var entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');
   if (customizedWebpackConfig.entry[config.entryName]) {
@@ -2421,7 +2426,7 @@ Called when a route is about to be entered. It provides the next router state an
 其中这里的nextState内容如下：
 ```js
 {
-  "routes": [
+  "routes": [//nextState.routes
     {
       "path": "/",
       "indexRoute": {},
@@ -2462,9 +2467,11 @@ Called when a route is about to be entered. It provides the next router state an
       "path": "components/:children/"
     }
   ],
+  //nextState.params
   "params": {
     "children": "button-cn"
   },
+  //nextState.location
   "location": {
     "pathname": "components/button-cn/",
     "search": "",
@@ -2485,7 +2492,9 @@ http://localhost:8001/components/button/
 ```
 
 那么筛选得到的pageData就是如下的内容:
+
 ![](./pageData.png)
+
 注意：`如果路由是http://localhost:8001/components/button-cn/那么我们得到的pageData就是null，那么我们要通过button而不是button-cn进一步获取`！我们针对这种情况也给出一个例子：
 
 ```jsx
@@ -2544,6 +2553,222 @@ export function collect(nextProps, callback) {
   plugins.map((plugin) => plugin.utils || {})
     .forEach((u) => Object.assign(utils, u));
 ```
+
+
+### 4.为什么我们最后得到的字段的值都是函数
+
+如下：
+
+![](./func.png)
+
+什么也不说，直接上代码:
+```js
+function lazyLoadWrapper(filePath, filename, isSSR) {
+  return 'function () {\n' +
+    '  return new Promise(function (resolve) {\n' +
+    (isSSR ? '' : '    require.ensure([], function (require) {\n') +
+    `      resolve(require('${filePath}'));\n` +
+    (isSSR ? '' : `    }, '${filename}');\n`) +
+    '  });\n' +
+    '}';
+}
+function shouldLazyLoad(nodePath, nodeValue, lazyLoad) {
+  if (typeof lazyLoad === 'function') {
+    return lazyLoad(nodePath, nodeValue);
+  }
+  return typeof nodeValue === 'object' ? false : lazyLoad;
+}
+function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const shouldBeLazy = shouldLazyLoad(nodePath, nodeValue, lazyLoad);
+  return R.cond([
+    [(n) => typeof n === 'object', (obj) => { 
+      if (shouldBeLazy) {
+        const filePath = path.join(
+          __dirname, '..', '..', 'tmp',
+          nodePath.replace(/^\/+/, '').replace(/\//g, '-')
+        );
+        const fileContent = 'module.exports = ' +
+                `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
+        fs.writeFileSync(filePath, fileContent);
+        return lazyLoadWrapper(filePath, nodePath.replace(/^\/+/, ''), isSSR);
+      }
+      return `{\n${stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)}\n${indent}}`;
+    }],
+    [R.T, (filename) => {
+      const filePath = path.join(process.cwd(), filename);
+      if (shouldBeLazy) {
+        return lazyLoadWrapper(filePath, filename, isSSR);
+      }
+      return `require('${filePath}')`;
+    }],
+  ])(nodeValue);
+}
+```
+
+贴上我们在bisheng.config.js中的配置：
+```js
+ lazyLoad(nodePath, nodeValue) {
+    if (typeof nodeValue === 'string') {
+      //nodeValue是string表示是具体的文件了
+      return true;
+    }
+    return nodePath.endsWith('/demo');
+  }
+```
+
+所以当遍历到如`/components/button/demo`时候，虽然是对象，但是shouldBeLazy为true，所以都写到tmp/comonents-button-demo这个文件中去了，而且此时会通过lazyLoadWrapper函数包裹成为一个promise对象，所以我们所有的demo都是一个函数了，而且这个函数调用的时候就是加载tmp/comonents-button-demo这个文件，也就是该组件的所有的demo的演示。同时对于components/button/index.zh-CN.md最后也会生成一个函数，因为根据我们的配置他的nodeValue是string，所以也是懒加载的！那么我们在组件中是如何调用的呢？
+
+```js
+ const demos = nextProps.utils.get(nextProps.data, [...pageDataPath, 'demo']);
+  if (demos) {
+    promises.push(demos());
+    //所以调用的时候返回的是一个promise对象，这也是上面的lazyLoadWrapper做的事！
+  }
+  Promise.all(promises)
+    .then(list => callback(null, {
+      ...nextProps,
+      localizedPageData: list[0],
+      demos: list[1],
+    }));
+}
+```
+
+
+### 5.我们在plugin的lib/browser下配置的都是用于将jsonml转化为最终的react组件
+
+很显然下面的例子就是我们从lib/browser中获取到的所有的converters集合。
+```js
+ const utils = {
+    get: exist.get,
+    toReactComponent(jsonml) {
+      return toReactComponent(jsonml, converters);
+    },
+  }
+```
+
+下面是官方的一个实例：
+```js
+const React = require('react');
+const ReactDOM = require('react-dom');
+const toReactComponent = require('jsonml-to-react-component');
+const website = [
+  'section',
+  [
+    'header',
+    ...
+  ],
+  [
+    'article',
+    [
+      'h1',
+      'Hello world!',
+    ],
+  ],
+  [
+    'footer',
+    ...
+  ]
+];
+const html5to4 = [
+  [
+    (node) => ['section', 'header', 'article', 'footer'].indexOf(node[0]) > -1,
+    (node, index) => React.createElement(
+      'div',
+      { key: index },
+      node.slice(1).map((child) => toReactComponent(child, html5to4))
+    )
+  ],
+  ...
+];
+ReactDOM.render(
+  toReactComponent(website, html5to4),
+  document.getElementById('content')
+);
+```
+
+下面是bisheng-plugin-react中的lib/browser配置:
+```js
+'use strict';
+/* eslint-disable no-var */
+var React = require('react');
+module.exports = function() {
+  return {
+    converters: [
+      [
+        function(node) { return typeof node === 'function'; },
+        function(node, index) {
+          return React.cloneElement(node(), { key: index });
+        },
+      ],
+    ],
+  };
+};
+```
+
+那么这里的配置为什么会判断node是否是函数呢?我们在bisheng-data-loader和markdown-loader中都是返回的一个对象，而不是函数！但是在我们的bisheng-plugin-react中添加了一个loader用于处理markdown文件，如下:
+```js
+'use strict';
+const path = require('path');
+function generateQuery(config) {
+  return Object.keys(config)
+    .map((key) => `${key}=${config[key]}`)
+    .join('&');
+}
+module.exports = (config) => {
+  return {
+    webpackConfig(bishengWebpackConfig) {
+      bishengWebpackConfig.module.loaders.forEach((loader) => {
+        if (loader.test.toString() !== '/\\.md$/') return;
+        const babelIndex = loader.loaders.indexOf('babel');
+        const query = generateQuery(config);
+        loader.loaders.splice(babelIndex + 1, 0, path.join(__dirname, `jsonml-react-loader?${query}`));
+      });
+      return bishengWebpackConfig;
+    },
+  };
+};
+```
+
+上面你看到的jsonml-react-loader就是我们这里关注的重点：
+```js
+'use strict';
+const loaderUtils = require('loader-utils');
+const generator = require('babel-generator').default;
+const transformer = require('./transformer');
+module.exports = function jsonmlReactLoader(content) {
+  if (this.cacheable) {
+    this.cacheable();
+  }
+  const query = loaderUtils.parseQuery(this.query);
+  const lang = query.lang || 'react-example';
+  const res = transformer(content, lang);
+  const inputAst = res.inputAst;
+  const imports = res.imports;
+  for (let k = 0; k < imports.length; k++) {
+    inputAst.program.body.unshift(imports[k]);
+  }
+  const code = generator(inputAst, null, content).code;
+  const noreact = query.noreact;
+  if (noreact) {
+    return code;
+  }
+  return 'import React from \'react\';\n' +
+    'import ReactDOM from \'react-dom\';\n' +
+    code;
+};
+```
+
+这里的代码上面都分析过了，但是很显然我们这里返回的是一个函数，而不是一个对象。这也是为什么我们判断是否是函数，如若是函数那么我们就知道是通过这个plugin进行处理，这时候我们就通过上面的React.cloneElement来处理。所以，通过bisheng-plugin-react来让jsx在页面中显示真实的效果！因为它已经解析过了，通过React.cloneElement!
+
+
+### 6.传入组件真实的实例化数据
+
+具体传入的数据如下：
+
+![](./final.png)
+
+具体查看componentData.js中的内容
 
 
 
