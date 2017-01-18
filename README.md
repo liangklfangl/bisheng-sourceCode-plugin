@@ -2536,7 +2536,7 @@ export function collect(nextProps, callback) {
       }
 ```
 
-注意，对于我们的bisheng.config.js中配置的plugins的lib/browser都是具有util方法的：
+注意，对于我们的bisheng.config.js中配置的plugins的lib/browser都是具有util方法：
 ```js
   plugins.map((plugin) => plugin.utils || {})
     .forEach((u) => Object.assign(utils, u));
