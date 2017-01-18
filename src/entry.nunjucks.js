@@ -8,7 +8,7 @@ const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const history = require('history');
 const data = require('../lib/utils/data.js');
-//这个文件只有一句代码"use strict;"
+//这个文件只有一句代码"use strict;"真实数据在根目录下的data.js文件
 const createElement = require('../lib/utils/create-element');
 const routes = require('{{ routesPath }}')(data);
 /*注意：这个返回的routes既然可以作为ReactRouter.match的参数，那么表示他肯定是一个组件的嵌套类型数据

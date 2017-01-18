@@ -1697,7 +1697,6 @@ console.log('babylon',JSON.stringify(babylon.parse(code)));
         "directives": [ ]
     }, 
     "comments": [ ], 
-    //comments和tokens两个部分,tokens是对javascript字符串进行拆分后的结果，comments表示注释
     "tokens": [
         {
             "type": {
@@ -2068,7 +2067,7 @@ function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
         );
         const fileContent = 'module.exports = ' +
                 `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
-          //对内容进行string化
+          //先写入内容到文件中，然后再使用函数包裹起来这个文件名
         fs.writeFileSync(filePath, fileContent);
         //写到temp目录下我们的文件
         return lazyLoadWrapper(filePath, nodePath.replace(/^\/+/, ''), isSSR);
@@ -2077,6 +2076,7 @@ function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
       return `{\n${stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)}\n${indent}}`;
     }],
     [R.T, (filename) => {
+      //文件树最内层是文件名filename
       const filePath = path.join(process.cwd(), filename);
       if (shouldBeLazy) {
         return lazyLoadWrapper(filePath, filename, isSSR);
@@ -2120,6 +2120,435 @@ function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
 }
 ```
 
+### 4.为webpack配置设置entry为react-router文件
+```js
+ var entryPath = path.join(bishengLib, '..', 'tmp', 'entry.' + config.entryName + '.js');
+  if (customizedWebpackConfig.entry[config.entryName]) {
+    throw new Error('Should not set `webpackConfig.entry.' + config.entryName + '`!');
+  }
+  customizedWebpackConfig.entry[config.entryName] = entryPath;
+```
+
+入口文件entry.index.js中获取了../lib/utils/data.js,但是注意这个文件只是`placeholder`,因为在loader中对它进行了特殊的处理了(所以你看到的就是一个空的文件)：
+```js
+const data = require('../lib/utils/data.js');
+const routes = require('{{ routesPath }}')(data);
+```
+
+处理他的loader如下：
+```js
+  webpackConfig.module.loaders.push({
+    test: function test(filename) {
+    //所以对于utils/data.js和utils/ssr-data.js文件都会进行单独的处理
+      return filename === path.join(bishengLib, 'utils', 'data.js') || filename === path.join(bishengLib, 'utils', 'ssr-data.js');
+    },
+    loader: '' + path.join(bishengLibLoaders, 'bisheng-data-loader') + ('?config=' + configFile + '&isBuild=' + isBuild)
+  });
+```
+
+也就是bisheng-data-loader，这个loader在上面已经分析过了，我们还是看看它里面的处理吧:
+
+```js
+module.exports = function bishengDataLoader(/* content */) {
+  if (this.cacheable) {
+    this.cacheable();
+  }
+  const webpackRemainingChain = loaderUtils.getRemainingRequest(this).split('!');
+  const fullPath = webpackRemainingChain[webpackRemainingChain.length - 1];
+  const isSSR = fullPath.endsWith('ssr-data.js');
+  const query = loaderUtils.parseQuery(this.query);
+  const config = getConfig(query.config);
+  //得到配置文件bisheng.config.js
+  const markdown = markdownData.generate(config.source);
+  //得到文件树对象
+  const browserPlugins = resolvePlugins(config.plugins, 'browser');
+  const pluginsString = browserPlugins.map(
+    (plugin) =>
+      `require('${plugin[0]}')(${JSON.stringify(plugin[1])})`
+  ).join(',\n');
+ //加载所有的plugins中的"lib/browser"模块（第一个是插件路径，第二个是query字段），并通过所有这些模块来处理，并通过join方法来合并起来
+  const picked = {};
+  if (config.pick) {
+    const nodePlugins = resolvePlugins(config.plugins, 'node');//解析node模块
+    markdownData.traverse(markdown, (filename) => {
+      const fileContent = fs.readFileSync(path.join(process.cwd(), filename)).toString();
+      const parsedMarkdown = markdownData.process(filename, fileContent, nodePlugins, query.isBuild);
+      //转化为了jsonML
+      Object.keys(config.pick).forEach((key) => {
+        if (!picked[key]) {
+          picked[key] = [];
+        }
+        const picker = config.pick[key];
+        const pickedData = picker(parsedMarkdown);
+        //对于每一个picker中的方法都会传入已经解析好的markdown数据，把得到的结果作为picked传入到数组中返回
+        if (pickedData) {
+          picked[key].push(pickedData);
+        }
+      });
+    });
+  }
+  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+    `\n};`;
+};
+```
+
+我们贴出一个'lib/browser'的内容，来自于bisheng-plugin-react
+```js
+'use strict';
+/* eslint-disable no-var */
+var React = require('react');
+module.exports = function() {
+  return {
+    converters: [
+      [
+        function(node) { return typeof node === 'function'; },
+        function(node, index) {
+          return React.cloneElement(node(), { key: index });
+        },
+      ],
+    ],
+  };
+};
+```
+
+其他部分在上面说过了，我们只要知道当加载data.js时候其实是加载的这个loader返回的对象，含有markdown(文件树对象转化已经stringify了),plugins(所有的bisheng.config.js中配置的plugin下面的`lib/browser`部分),picked内容(传入文件树jsonML到pick函数中返回的值)。我们看看最终的数据,也就是`bisheng-data-loader`这个loader返回的值:
+
+所有markdown是如下类型:
+```js
+"markdown": {
+    "components": {//components部分
+      "Ali": {
+        "index": {}
+      }
+    },
+     "docs": {//docs部分
+      "pattern": {},
+      "practice": {},
+    },
+    "CHANGELOG": {}//CHANGELOG部分
+}
+```
+
+plugins是如下类型:
+```js
+"plugins": [
+    {//上面已经看过lib/browser下的返回内容是一个对象，其converters是一个数组
+      "converters": [
+        [
+          null,
+          null
+        ]
+      ]
+    }
+]
+```
+
+picked是如下类型：
+```js
+ "picked": {
+    "components": [
+    //picked[key] = [];所有picked中每一个key都是对应一个数组
+    //picked={components:[],changelog:[]}这种类型
+      {
+        "meta": {
+          "category": "Components",
+          "type": "General",
+          "title": "阿里",
+          "subtitle": "阿里",
+          "filename": "components/Ali/index.en-US.md"
+        }
+      }
+    ]
+}
+```
+
+处理方式如下:
+```js
+  return 'var Promise = require(\'bluebird\');\n' +
+    'module.exports = {' +
+    //其中markdown是文件树
+    `\n  markdown: ${markdownData.stringify(markdown, config.lazyLoad, isSSR)},` +
+    `\n  plugins: [\n${pluginsString}\n],` +//数组
+    `\n  picked: ${JSON.stringify(picked, null, 2)},` +//每一个函数是一个数组
+    `\n};`;
+```
+
+我们看看react-router中传入的最终的内容：
+```js
+require('babel-polyfill');
+require('nprogress/nprogress.css');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const ReactRouter = require('react-router');
+const history = require('history');
+const data = require('../lib/utils/data.js');
+//placeholder file。真实内容见根目录的data.js
+const createElement = require('../lib/utils/create-element');
+const routes = require('{{ routesPath }}')(data);
+ReactRouter.match({ routes, location, basename }, () => {
+  const router =
+    <ReactRouter.Router
+      history={ReactRouter.useRouterHistory(history.createHistory)({ basename })}
+      routes={routes}
+      createElement={createElement}
+    \/>;
+  ReactDOM.render(
+    router,
+    document.getElementById('react-content')
+  );
+});
+```
+
+其中data内容见data.js!传入到上面的routes对象结构：
+![](./routes.png)
+
+我们看看上面是如何处理得到我们的routes.png中的内容的：
+```js
+'use strict';
+const chain = require('ramda/src/chain');
+const toReactComponent = require('jsonml-to-react-component');
+const exist = require('exist.js');
+const NProgress = require('nprogress');
+const NotFound = require('{{ themePath }}/template/NotFound');
+//这个函数的作用就是：把相应位置的参数用参数的值进行替换就可以了，也就是说计算参数的值
+function calcPropsPath(dataPath, params) {
+  return Object.keys(params).reduce(
+    (path, param) => path.replace(`:${param}`, params[param]),
+    dataPath
+  );
+}
+function hasParams(dataPath) {
+  return dataPath.split('/').some((snippet) => snippet.startsWith(':'));
+}
+function defaultCollect(nextProps, callback) {
+  callback(null, nextProps);
+}
+//其中传入的data包含markdown,plugins,pick等内容，上面已经说过了
+module.exports = function getRoutes(data) {
+  const plugins = data.plugins;
+  const converters = chain((plugin) => plugin.converters || [], plugins);
+  //得到所有的bisheng.config.js中配置的lib/browser所有的converters集合
+  const utils = {
+    get: exist.get,
+    toReactComponent(jsonml) {
+      return toReactComponent(jsonml, converters);
+    },
+  };
+  plugins.map((plugin) => plugin.utils || {})
+    .forEach((u) => Object.assign(utils, u));
+ //每一个plugin除了有converters，还有我们的utils对象
+
+//传入的template表示组件的路径，如const contentTmpl = './template/Content/index';
+  function templateWrapper(template, dataPath = '') {
+    const Template = require('{{ themePath }}/template' + template.replace(/^\.\/template/, ''));
+    //template传入的是组件的路径，如'./template/Content/index'
+    return (nextState, callback) => {
+      const propsPath = calcPropsPath(dataPath, nextState.params);
+      //这个函数的作用就是：把相应位置的参数用参数的值进行替换就可以了，也就是说计算参数的值并替换参数，如  path: 'components/:children/'中的children会被替换掉param.children的值，如http://localhost:8001/components/button-cn/会替换成["components","button-cn"]
+      const pageData = exist.get(data.markdown, propsPath.replace(/^\//, '').split('/'));
+      //其中data.markdown参考data.js,其具有CHANGELOG,components,docs等属性
+      const collect = Template.collect || defaultCollect;
+      //如果这个组件有collect方法，那么调用它，传入data,picked,pageData,utils等属性
+      collect(Object.assign({}, nextState, {
+        data: data.markdown,//data.markdown表示完整的页面的数据包括components,changelog,docs等,也就是'/'路径得到的结果
+        picked: data.picked,
+        //picked表示经过bisheng.config.js中pick筛选后得到的结果
+        pageData,
+        //根据URL进行对data筛选
+        utils,
+        //传入工具函数
+      }), (err, nextProps) => {
+        const Comp = (hasParams(dataPath) || pageData) && err !== 404 ?
+                Template.default || Template : NotFound.default || NotFound;
+         //如果不是404，那么执行exports.default对象，否则执行组件NotFound这个Component
+        const dynamicPropsKey = nextState.location.pathname;
+        Comp[dynamicPropsKey] = nextProps;
+        //为组件添加一个属性名称：nextState.location.pathname，其值为nextProps
+        callback(err === 404 ? null : err, Comp);
+        //回调函数的signiture:cb(err, components)
+      });
+    };
+  }
+  const theme = require('{{ themePath }}');
+  const routes = Array.isArray(theme.routes) ? theme.routes : [theme.routes];
+  //得到我们配置的react-router对象
+  function processRoutes(route) {
+    if (Array.isArray(route)) {
+      return route.map(processRoutes);
+    }
+    return Object.assign({}, route, {
+      onEnter: () => {
+        if (typeof document !== 'undefined') {
+          NProgress.start();
+        }
+      },
+      component: undefined,
+      getComponent: templateWrapper(route.component, route.dataPath || route.path),
+      //getComponent获取到一个函数，接受参数nextState, callback
+      indexRoute: route.indexRoute && Object.assign({}, route.indexRoute, {
+        component: undefined,
+        getComponent: templateWrapper(
+          route.indexRoute.component,
+          route.indexRoute.dataPath || route.indexRoute.path
+        ),
+      }),
+      childRoutes: route.childRoutes && route.childRoutes.map(processRoutes),
+    });
+  }
+  const processedRoutes = processRoutes(routes);
+  //为我们的配置的routers添加了component，getComponent，indexRoute，onEnter函数和属性
+  processedRoutes.push({
+    path: '*',
+    getComponents: templateWrapper('./template/NotFound'),
+  });
+  //404路由
+  return processedRoutes;
+};
+```
+
+onEnter钩子[函数](http://www.ruanyifeng.com/blog/2016/05/react_router.html)的作用如下：
+  *onEnter(nextState, replace, callback?)*
+
+Called when a route is about to be entered. It provides the next router state and a function to redirect to another path. this will be the route instance that triggered the hook.If callback is listed as a 3rd argument, this hook will run asynchronously, and the transition will block until callback is called.
+
+其中这里的nextState内容如下：
+```js
+{
+  "routes": [
+    {
+      "path": "/",
+      "indexRoute": {},
+      "childRoutes": [
+        {
+          "path": "index-cn",
+          "dataPath": "/"
+        },
+        {
+          "path": "docs/practice/:children"
+        },
+        {
+          "path": "docs/pattern/:children"
+        },
+        {
+          "path": "docs/react/:children"
+        },
+        {
+          "path": "changelog",
+          "dataPath": "CHANGELOG"
+        },
+        {
+          "path": "changelog-cn",
+          "dataPath": "CHANGELOG"
+        },
+        {
+          "path": "components/:children/"
+        },
+        {
+          "path": "docs/spec/:children"
+        },
+        {
+          "path": "docs/resource/:children"
+        }
+      ]
+    },
+    {
+      "path": "components/:children/"
+    }
+  ],
+  "params": {
+    "children": "button-cn"
+  },
+  "location": {
+    "pathname": "components/button-cn/",
+    "search": "",
+    "hash": "",
+    "action": "POP",
+    "key": null,
+    "basename": "/",
+    "query": {}
+  }
+}
+```
+
+其中上面的nextState具有如下的内容，分别是`routes,params,location`。
+
+其中的pageData就是对上面的data.js的内容进行进一步的筛选得到的结果，如果路由如下:
+```js
+http://localhost:8001/components/button/
+```
+
+那么筛选得到的pageData就是如下的内容:
+![](./pageData.png)
+注意：`如果路由是http://localhost:8001/components/button-cn/那么我们得到的pageData就是null，那么我们要通过button而不是button-cn进一步获取`！我们针对这种情况也给出一个例子：
+
+```jsx
+export function collect(nextProps, callback) {
+  const pathname = nextProps.location.pathname;
+  //得到components/button-cn/
+  const locale = utils.isZhCN(pathname) ? 'zh-CN' : 'en-US';
+  //获取本地语言
+  const pageDataPath = pathname.replace('-cn', '').split('/');
+  //去掉path中的cn部分
+  let pageData = nextProps.pageData;
+  //这时候路由就是空，以为url是button-cn而不是button，所以我们从整个网页的数据中获取
+  if (!pageData && locale === 'zh-CN') {
+     pageData = nextProps.utils.get(nextProps.data, pageDataPath);
+  }
+  //如果英文和中文路径都没有获取到，那么我们捕获整个异常，处理函数在下面
+  if (!pageData) {
+    callback(404, nextProps);
+    return;
+  }
+  const pageDataPromise = typeof pageData === 'function' ?
+          pageData() : (pageData[locale] || pageData.index[locale] || pageData.index)();
+  //layload为true时候，相应的字段的获取全部采用的是一个函数来包裹，只有调用了这个函数才能获取到相应的数据,这里获取到的是一个promise
+  const promises = [pageDataPromise];
+  const demos = nextProps.utils.get(nextProps.data, [...pageDataPath, 'demo']);
+ //nextProps.data是页面完整的数据
+  if (demos) {
+    promises.push(demos());
+  }
+  //所有的demos放在一个文件中
+  Promise.all(promises)
+    .then(list => callback(null, {
+      //表示成功的回调函数
+      ...nextProps,
+      localizedPageData: list[0],//这里是已经转化为本地的pageData了
+      demos: list[1],//所有的demo集合
+    }));
+}
+```
+
+异常处理函数如下:
+```js
+      (err, nextProps) => {
+        const Comp = (hasParams(dataPath) || pageData) && err !== 404 ?
+                Template.default || Template : NotFound.default || NotFound;
+         //如果不是404，那么执行exports.default对象，否则执行组件NotFound这个Component
+        const dynamicPropsKey = nextState.location.pathname;
+        Comp[dynamicPropsKey] = nextProps;
+        //为组件添加一个属性名称：nextState.location.pathname，其值为nextProps
+        callback(err === 404 ? null : err, Comp);
+      }
+```
+
+注意，对于我们的bisheng.config.js中配置的plugins的lib/browser都是具有util方法的：
+```js
+  plugins.map((plugin) => plugin.utils || {})
+    .forEach((u) => Object.assign(utils, u));
+```
+
+
+
+
 参考资料：
 
 [理解 Babel 插件](http://taobaofed.org/blog/2016/09/29/babel-plugins/)
+
+[onEnter函数钩子](http://www.ruanyifeng.com/blog/2016/05/react_router.html)
+
+[React Router使用](https://github.com/ReactTraining/react-router/blob/1.0.x/docs/API.md#getcomponentslocation-callback)
