@@ -2067,6 +2067,7 @@ function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
         );
         const fileContent = 'module.exports = ' +
                 `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
+
           //先写入内容到文件中，然后再使用函数包裹起来这个文件名
         fs.writeFileSync(filePath, fileContent);
         //写到temp目录下我们的文件
@@ -2119,6 +2120,7 @@ function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
   return kvStrings.join('\n');
 }
 ```
+
 
 ### 4.为webpack配置设置entry为react-router文件
 ```js
@@ -2542,7 +2544,6 @@ export function collect(nextProps, callback) {
   plugins.map((plugin) => plugin.utils || {})
     .forEach((u) => Object.assign(utils, u));
 ```
-
 
 
 
