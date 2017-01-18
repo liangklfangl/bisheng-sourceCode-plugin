@@ -2044,7 +2044,81 @@ module.exports = {
 }
 ```
 
-这就是我们每一个组件的所有的用法组件的一个模块。
+这就是我们每一个组件的所有的用法组件的一个模块。这和我们在bisheng.config.js中配置有关：
+```js
+  lazyLoad(nodePath, nodeValue) {
+    if (typeof nodeValue === 'string') {
+      return true;
+    }
+    return nodePath.endsWith('/demo');
+  }
+```
+
+下面是牵涉的代码：
+```js
+function stringify(nodePath, nodeValue, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const shouldBeLazy = shouldLazyLoad(nodePath, nodeValue, lazyLoad);
+  return R.cond([
+    [(n) => typeof n === 'object', (obj) => { //这里会接受到后面的nodeValue作为参数
+      if (shouldBeLazy) {
+        const filePath = path.join(
+          __dirname, '..', '..', 'tmp',
+          nodePath.replace(/^\/+/, '').replace(/\//g, '-')
+        );
+        const fileContent = 'module.exports = ' +
+                `{\n${stringifyObject(nodePath, obj, false, isSSR, 1)}\n}`;
+          //对内容进行string化
+        fs.writeFileSync(filePath, fileContent);
+        //写到temp目录下我们的文件
+        return lazyLoadWrapper(filePath, nodePath.replace(/^\/+/, ''), isSSR);
+      }
+       //如果不需要懒加载，那么我们直接调用stringifyObject就可以了
+      return `{\n${stringifyObject(nodePath, obj, lazyLoad, isSSR, depth)}\n${indent}}`;
+    }],
+    [R.T, (filename) => {
+      const filePath = path.join(process.cwd(), filename);
+      if (shouldBeLazy) {
+        return lazyLoadWrapper(filePath, filename, isSSR);
+      }
+      return `require('${filePath}')`;
+    }],
+  ])(nodeValue);
+}
+```
+
+```js
+function shouldLazyLoad(nodePath, nodeValue, lazyLoad) {
+  if (typeof lazyLoad === 'function') {
+    return lazyLoad(nodePath, nodeValue);
+  }
+  return typeof nodeValue === 'object' ? false : lazyLoad;
+}
+```
+
+```js
+function lazyLoadWrapper(filePath, filename, isSSR) {
+  return 'function () {\n' +
+    '  return new Promise(function (resolve) {\n' +
+    (isSSR ? '' : '    require.ensure([], function (require) {\n') +
+    `      resolve(require('${filePath}'));\n` +
+    (isSSR ? '' : `    }, '${filename}');\n`) +
+    '  });\n' +
+    '}';
+}
+```
+
+```js
+function stringifyObject(nodePath, obj, lazyLoad, isSSR, depth) {
+  const indent = '  '.repeat(depth);
+  const kvStrings = R.pipe(
+    R.toPairs,
+    R.map((kv) => //这每一个rv对象都是这样的['a','1']第一个元素是key，第二个为value
+          `${indent}  '${kv[0]}': ${stringify(nodePath + '/' + kv[0], kv[1], lazyLoad, isSSR, depth + 1)},`)
+  )(obj);
+  return kvStrings.join('\n');
+}
+```
 
 参考资料：
 
