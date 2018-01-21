@@ -1,4 +1,4 @@
-我都不知道为什么要仔细分析这背后的逻辑，可能是因为bisheng.js在ant design中出色的表现吧
+我都不知道为什么要仔细分析这背后的逻辑，可能是因为bisheng.js在ant design中出色的表现吧。这篇文章来自于我的[github文章全集](https://github.com/liangklfangl/react-article-bucket)，欢迎star,issue
 
 ### 1.npm start背后的逻辑
 
